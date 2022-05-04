@@ -9,33 +9,36 @@ info:
     name: "The MIT License (MIT)"
     url: "https://mit-license.org/"
 host: "localhost:8080"
-basePath: "/v1"
 tags:
-- name: "teacher"
-  description: "Api for teacher"
-- name: "student"
-  description: "Api for student"
+  - name: "teacher"
+    description: "Api for teacher"
+  - name: "student"
+    description: "Api for student"
+  - name: "teacher pages"
+    description: "Pages for teacher"
+  - name: "student pages"
+    description: "Pages for student"
 schemes:
-- "http"
+  - "http"
 paths:
-  /teacher/homeworks:
+  /v1/teacher/homeworks:
     post:
       tags:
-      - "teacher"
+        - "teacher"
       summary: "Add new homework"
       description: "Homework will be shown to students after publicationDatetime"
       operationId: "addHomeworkTeacher"
       consumes:
-      - "application/json"
+        - "application/json"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - in: "body"
-        name: "homework"
-        description: "Homework that needs to be added to the system"
-        required: true
-        schema:
-          $ref: "#/definitions/NewHomework"
+        - in: "body"
+          name: "homework"
+          description: "Homework that needs to be added to the system"
+          required: true
+          schema:
+            $ref: "#/definitions/NewHomework"
       responses:
         "200":
           description: "Successful operation"
@@ -45,12 +48,12 @@ paths:
           description: "Invalid homework"
     get:
       tags:
-      - "teacher"
+        - "teacher"
       summary: "Get homeworks"
       description: "Returns homeworks sorted by deadline"
       operationId: "getHomeworksTeacher"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
         - in: query
           required: true
@@ -64,27 +67,27 @@ paths:
           description: The numbers of items to return
       responses:
         "200":
-          description: "successful operation"
+          description: "Successful operation"
           schema:
             type: "array"
             items:
               $ref: "#/definitions/Homework"
-  /teacher/homeworks/{homeworkId}:
+  /v1/teacher/homeworks/{homeworkId}:
     get:
       tags:
-      - "teacher"
+        - "teacher"
       summary: "Get homework"
       description: "Returns a single homework with specified ID"
       operationId: "getHomeworkByIdTeacher"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - name: "homeworkId"
-        in: "path"
-        description: "ID of homework"
-        required: true
-        type: "integer"
-        format: "int64"
+        - name: "homeworkId"
+          in: "path"
+          description: "ID of homework"
+          required: true
+          type: "integer"
+          format: "int64"
       responses:
         "200":
           description: "successful operation"
@@ -94,35 +97,35 @@ paths:
           description: "Invalid ID supplied"
         "404":
           description: "Homework not found"
-  /teacher/homeworks/{homeworkId}/submissions:
+  /v1/teacher/homeworks/{homeworkId}/submissions:
     get:
       tags:
-      - "teacher"
+        - "teacher"
       summary: "Get homework submissions"
       description: "Returns submissions of homework with specified id sorted by deadline"
       operationId: "getHomeworkSubmissionsTeacher"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - name: "homeworkId"
-        in: "path"
-        description: "ID of homework"
-        required: true
-        type: "integer"
-        format: "int64"
-      - in: query
-        required: true
-        name: offset
-        type: integer
-        description: The number of items to skip before starting to collect the result set
-      - in: query
-        required: true
-        name: limit
-        type: integer
-        description: The numbers of items to return
+        - name: "homeworkId"
+          in: "path"
+          description: "ID of homework"
+          required: true
+          type: "integer"
+          format: "int64"
+        - in: query
+          required: true
+          name: offset
+          type: integer
+          description: The number of items to skip before starting to collect the result set
+        - in: query
+          required: true
+          name: limit
+          type: integer
+          description: The numbers of items to return
       responses:
         "200":
-          description: "successful operation"
+          description: "Successful operation"
           schema:
             type: "array"
             items:
@@ -131,40 +134,43 @@ paths:
           description: "Invalid ID supplied"
         "404":
           description: "Homework not found"
-  /teacher/submissions/{submissionId}:
+  /v1/teacher/submissions/{submissionId}:
     get:
       tags:
-      - "teacher"
+        - "teacher"
       summary: "Get submission"
       description: "Returns a single submission with specified id"
       operationId: "getSubmissionTeacher"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - name: "submissionId"
-        in: "path"
-        description: "ID of submission"
-        required: true
-        type: "integer"
-        format: "int64"
+        - name: "submissionId"
+          in: "path"
+          description: "ID of submission"
+          required: true
+          type: "integer"
+          format: "int64"
       responses:
         "200":
-          description: "successful operation"
+          description: "Successful operation"
           schema:
             $ref: "#/definitions/Submission"
         "400":
           description: "Invalid ID supplied"
         "404":
           description: "Submission not found"
-  /student/homeworks:
+
+
+
+  /v1/student/homeworks:
     get:
       tags:
-      - "student"
+        - "student"
       summary: "Get homeworks"
       description: "Returns homeworks sorted by deadline"
       operationId: "getHomeworksStudent"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
         - in: query
           required: true
@@ -178,60 +184,60 @@ paths:
           description: The numbers of items to return
       responses:
         "200":
-          description: "successful operation"
+          description: "Successful operation"
           schema:
             type: "array"
             items:
               $ref: "#/definitions/Homework"
-  /student/homeworks/{homeworkId}:
+  /v1/student/homeworks/{homeworkId}:
     get:
       tags:
-      - "student"
+        - "student"
       summary: "Get homework"
       description: "Returns a single homework with specified id"
       operationId: "getHomeworkByIdStudent"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - name: "homeworkId"
-        in: "path"
-        description: "ID of homework"
-        required: true
-        type: "integer"
-        format: "int64"
+        - name: "homeworkId"
+          in: "path"
+          description: "ID of homework"
+          required: true
+          type: "integer"
+          format: "int64"
       responses:
         "200":
-          description: "successful operation"
+          description: "Successful operation"
           schema:
             $ref: "#/definitions/Homework"
         "400":
           description: "Invalid ID supplied"
         "404":
           description: "Homework not found"
-  /student/homeworks/{homeworkId}/submissions:
+  /v1/student/homeworks/{homeworkId}/submissions:
     post:
       tags:
-      - "student"
+        - "student"
       summary: "Add new submission"
       description: ""
       operationId: "addSubmissionStudent"
       consumes:
-      - "application/json"
+        - "application/json"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - name: "homeworkId"
-        in: "path"
-        description: "ID of homework"
-        required: true
-        type: "integer"
-        format: "int64"
-      - in: "body"
-        name: "homework"
-        description: "Submission that needs to be added to the system"
-        required: true
-        schema:
-          $ref: "#/definitions/NewSubmission"
+        - name: "homeworkId"
+          in: "path"
+          description: "ID of homework"
+          required: true
+          type: "integer"
+          format: "int64"
+        - in: "body"
+          name: "homework"
+          description: "Submission that needs to be added to the system"
+          required: true
+          schema:
+            $ref: "#/definitions/NewSubmission"
       responses:
         "200":
           description: "Successful operation"
@@ -243,32 +249,32 @@ paths:
           description: "Homework not found"
     get:
       tags:
-      - "student"
+        - "student"
       summary: "Get homework submissions"
       description: "Returns submissions of homework with specified id sorted by deadline"
       operationId: "getHomeworkSubmissionsStudent"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - name: "homeworkId"
-        in: "path"
-        description: "ID of homework"
-        required: true
-        type: "integer"
-        format: "int64"
-      - in: query
-        required: true
-        name: offset
-        type: integer
-        description: The number of items to skip before starting to collect the result set
-      - in: query
-        required: true
-        name: limit
-        type: integer
-        description: The numbers of items to return
+        - name: "homeworkId"
+          in: "path"
+          description: "ID of homework"
+          required: true
+          type: "integer"
+          format: "int64"
+        - in: query
+          required: true
+          name: offset
+          type: integer
+          description: The number of items to skip before starting to collect the result set
+        - in: query
+          required: true
+          name: limit
+          type: integer
+          description: The numbers of items to return
       responses:
         "200":
-          description: "successful operation"
+          description: "Successful operation"
           schema:
             type: "array"
             items:
@@ -277,27 +283,232 @@ paths:
           description: "Invalid ID supplied"
         "404":
           description: "Homework not found"
-  /student/submissions/{submissionId}:
+  /v1/student/submissions/{submissionId}:
     get:
       tags:
-      - "student"
+        - "student"
       summary: "Get submission"
       description: "Returns a single submission with specified id"
       operationId: "getSubmissionStudent"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - name: "submissionId"
-        in: "path"
-        description: "ID of homework"
-        required: true
-        type: "integer"
-        format: "int64"
+        - name: "submissionId"
+          in: "path"
+          description: "ID of homework"
+          required: true
+          type: "integer"
+          format: "int64"
       responses:
         "200":
-          description: "successful operation"
+          description: "Successful operation"
           schema:
             $ref: "#/definitions/Submission"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Submission not found"
+
+
+
+  /teacher/homeworks:
+    get:
+      tags:
+        - "teacher pages"
+      summary: "Get homeworks page"
+      description: "Returns page with homeworks sorted by deadline"
+      operationId: "getHomeworksPageTeacher"
+      produces:
+        - "text/html"
+      parameters:
+        - in: query
+          required: false
+          name: page
+          type: integer
+          default: 1
+          minimum: 1
+          description: Order of page to return
+      responses:
+        "200":
+          description: "Successful operation"
+          examples:
+            text/html:
+              <html><body>Some HTML</body></html>
+        "400":
+          description: "Invalid page supplied"
+        "404":
+          description: "Page not found"
+  /teacher/homeworks/create:
+    get:
+      tags:
+        - "teacher pages"
+      summary: "Get creating homework page"
+      description: "Returns page for creating homework"
+      operationId: "createHomeworkPageTeacher"
+      produces:
+        - "text/html"
+      responses:
+        "200":
+          description: "Successful operation"
+          examples:
+            text/html:
+              <html><body>Some HTML</body></html>
+  /teacher/homeworks/{homeworkId}:
+    get:
+      tags:
+        - "teacher pages"
+      summary: "Get homework page"
+      description: "Returns page with homework with specified ID and its submissions"
+      operationId: "getHomeworkPageTeacher"
+      produces:
+        - "text/html"
+      parameters:
+        - name: "homeworkId"
+          in: "path"
+          description: "ID of homework"
+          required: true
+          type: "integer"
+          format: "int64"
+      responses:
+        "200":
+          description: "Successful operation"
+          examples:
+            text/html:
+              <html><body>Some HTML</body></html>
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Homework not found"
+  /teacher/submissions/{submissionId}:
+    get:
+      tags:
+        - "teacher pages"
+      summary: "Get submission page"
+      description: "Returns page with submission with specified ID"
+      operationId: "getSubmissionPageTeacher"
+      produces:
+        - "text/html"
+      parameters:
+        - name: "submissionId"
+          in: "path"
+          description: "ID of submission"
+          required: true
+          type: "integer"
+          format: "int64"
+      responses:
+        "200":
+          description: "Successful operation"
+          examples:
+            text/html:
+              <html><body>Some HTML</body></html>
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Submission not found"
+
+
+
+  /student/homeworks:
+    get:
+      tags:
+        - "student pages"
+      summary: "Get homeworks page"
+      description: "Returns page with homeworks sorted by deadline"
+      operationId: "getHomeworksPageStudent"
+      produces:
+        - "text/html"
+      parameters:
+        - in: query
+          required: false
+          name: page
+          type: integer
+          default: 1
+          minimum: 1
+          description: Order of page to return
+      responses:
+        "200":
+          description: "Successful operation"
+          examples:
+            text/html:
+              <html><body>Some HTML</body></html>
+        "400":
+          description: "Invalid page supplied"
+        "404":
+          description: "Page not found"
+  /student/homeworks/{homeworkId}:
+    get:
+      tags:
+        - "student pages"
+      summary: "Get homework page"
+      description: "Returns page with homework with specified ID and its submissions"
+      operationId: "getHomeworkPageStudent"
+      produces:
+        - "text/html"
+      parameters:
+        - name: "homeworkId"
+          in: "path"
+          description: "ID of homework"
+          required: true
+          type: "integer"
+          format: "int64"
+      responses:
+        "200":
+          description: "Successful operation"
+          examples:
+            text/html:
+              <html><body>Some HTML</body></html>
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Homework not found"
+  /student/homeworks/{homeworkId}/submissions/create:
+    get:
+      tags:
+        - "student pages"
+      summary: "Get creating submission page"
+      description: "Returns page for creating submission"
+      operationId: "createSubmissionPageStudent"
+      produces:
+        - "text/html"
+      parameters:
+        - name: "homeworkId"
+          in: "path"
+          description: "ID of homework"
+          required: true
+          type: "integer"
+          format: "int64"
+      responses:
+        "200":
+          description: "Successful operation"
+          examples:
+            text/html:
+              <html><body>Some HTML</body></html>
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Homework not found"
+  /student/submissions/{submissionId}:
+    get:
+      tags:
+        - "student pages"
+      summary: "Get submission page"
+      description: "Returns page with submission with specified ID"
+      operationId: "getSubmissionPageStudent"
+      produces:
+        - "text/html"
+      parameters:
+        - name: "submissionId"
+          in: "path"
+          description: "ID of submission"
+          required: true
+          type: "integer"
+          format: "int64"
+      responses:
+        "200":
+          description: "Successful operation"
+          examples:
+            text/html:
+              <html><body>Some HTML</body></html>
         "400":
           description: "Invalid ID supplied"
         "404":
@@ -306,10 +517,10 @@ definitions:
   NewHomework:
     type: "object"
     required:
-    - "name"
-    - "publicationDatetime"
-    - "task"
-    - "deadline"
+      - "name"
+      - "publicationDatetime"
+      - "task"
+      - "deadline"
     properties:
       name:
         type: "string"
@@ -332,11 +543,11 @@ definitions:
   Homework:
     type: "object"
     required:
-    - "id"
-    - "name"
-    - "publicationDatetime"
-    - "task"
-    - "deadline"
+      - "id"
+      - "name"
+      - "publicationDatetime"
+      - "task"
+      - "deadline"
     properties:
       id:
         type: "integer"
@@ -361,7 +572,7 @@ definitions:
   NewSubmission:
     type: "object"
     required:
-    - "solution"
+      - "solution"
     properties:
       solution:
         type: "string"
@@ -370,12 +581,12 @@ definitions:
   Submission:
     type: "object"
     required:
-    - "id"
-    - "homeworkId"
-    - "datetime"
-    - "solution"
-    - "mark"
-    - "comment"
+      - "id"
+      - "homeworkId"
+      - "datetime"
+      - "solution"
+      - "mark"
+      - "comment"
     properties:
       id:
         type: "integer"
