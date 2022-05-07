@@ -82,7 +82,7 @@ func (c *TeacherPagesApiController) CreateHomeworkPageTeacher(w http.ResponseWri
 	result, err := c.service.CreateHomeworkPageTeacher(r.Context())
 	// If an error occurred, encode the error with the status code
 	if err != nil {
-		c.errorHandler(w, r, err, &result)
+		c.errorHandler(w, r, err, result.Code)
 		return
 	}
 	// If no error, encode the body and the result code
@@ -96,19 +96,19 @@ func (c *TeacherPagesApiController) GetHomeworkPageTeacher(w http.ResponseWriter
 	query := r.URL.Query()
 	homeworkIdParam, err := parseInt64Parameter(params["homeworkId"], true)
 	if err != nil {
-		c.errorHandler(w, r, &ParsingError{Err: err}, nil)
+		c.errorHandler(w, r, &ParsingError{Err: err}, 0)
 		return
 	}
 
 	pageParam, err := parseInt32Parameter(query.Get("page"), false)
 	if err != nil {
-		c.errorHandler(w, r, &ParsingError{Err: err}, nil)
+		c.errorHandler(w, r, &ParsingError{Err: err}, 0)
 		return
 	}
 	result, err := c.service.GetHomeworkPageTeacher(r.Context(), homeworkIdParam, pageParam)
 	// If an error occurred, encode the error with the status code
 	if err != nil {
-		c.errorHandler(w, r, err, &result)
+		c.errorHandler(w, r, err, result.Code)
 		return
 	}
 	// If no error, encode the body and the result code
@@ -121,13 +121,13 @@ func (c *TeacherPagesApiController) GetHomeworksPageTeacher(w http.ResponseWrite
 	query := r.URL.Query()
 	pageParam, err := parseInt32Parameter(query.Get("page"), false)
 	if err != nil {
-		c.errorHandler(w, r, &ParsingError{Err: err}, nil)
+		c.errorHandler(w, r, &ParsingError{Err: err}, 0)
 		return
 	}
 	result, err := c.service.GetHomeworksPageTeacher(r.Context(), pageParam)
 	// If an error occurred, encode the error with the status code
 	if err != nil {
-		c.errorHandler(w, r, err, &result)
+		c.errorHandler(w, r, err, result.Code)
 		return
 	}
 	// If no error, encode the body and the result code
@@ -140,14 +140,14 @@ func (c *TeacherPagesApiController) GetSubmissionPageTeacher(w http.ResponseWrit
 	params := mux.Vars(r)
 	submissionIdParam, err := parseInt64Parameter(params["submissionId"], true)
 	if err != nil {
-		c.errorHandler(w, r, &ParsingError{Err: err}, nil)
+		c.errorHandler(w, r, &ParsingError{Err: err}, 0)
 		return
 	}
 
 	result, err := c.service.GetSubmissionPageTeacher(r.Context(), submissionIdParam)
 	// If an error occurred, encode the error with the status code
 	if err != nil {
-		c.errorHandler(w, r, err, &result)
+		c.errorHandler(w, r, err, result.Code)
 		return
 	}
 	// If no error, encode the body and the result code

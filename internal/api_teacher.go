@@ -20,7 +20,7 @@ import (
 
 // TeacherApiController binds http requests to an api service and writes the service results to the http response
 type TeacherApiController struct {
-	service TeacherApiServicer
+	service      TeacherApiServicer
 	errorHandler ErrorHandler
 }
 
@@ -50,7 +50,7 @@ func NewTeacherApiController(s TeacherApiServicer, opts ...TeacherApiOption) Rou
 
 // Routes returns all of the api route for the TeacherApiController
 func (c *TeacherApiController) Routes() Routes {
-	return Routes{ 
+	return Routes{
 		{
 			"AddHomeworkTeacher",
 			strings.ToUpper("Post"),
@@ -90,17 +90,17 @@ func (c *TeacherApiController) AddHomeworkTeacher(w http.ResponseWriter, r *http
 	d := json.NewDecoder(r.Body)
 	d.DisallowUnknownFields()
 	if err := d.Decode(&newHomeworkParam); err != nil {
-		c.errorHandler(w, r, &ParsingError{Err: err}, nil)
+		c.errorHandler(w, r, &ParsingError{Err: err}, 0)
 		return
 	}
 	if err := AssertNewHomeworkRequired(newHomeworkParam); err != nil {
-		c.errorHandler(w, r, err, nil)
+		c.errorHandler(w, r, err, 0)
 		return
 	}
 	result, err := c.service.AddHomeworkTeacher(r.Context(), newHomeworkParam)
 	// If an error occurred, encode the error with the status code
 	if err != nil {
-		c.errorHandler(w, r, err, &result)
+		c.errorHandler(w, r, err, result.Code)
 		return
 	}
 	// If no error, encode the body and the result code
@@ -113,14 +113,14 @@ func (c *TeacherApiController) GetHomeworkByIdTeacher(w http.ResponseWriter, r *
 	params := mux.Vars(r)
 	homeworkIdParam, err := parseInt64Parameter(params["homeworkId"], true)
 	if err != nil {
-		c.errorHandler(w, r, &ParsingError{Err: err}, nil)
+		c.errorHandler(w, r, &ParsingError{Err: err}, 0)
 		return
 	}
 
 	result, err := c.service.GetHomeworkByIdTeacher(r.Context(), homeworkIdParam)
 	// If an error occurred, encode the error with the status code
 	if err != nil {
-		c.errorHandler(w, r, err, &result)
+		c.errorHandler(w, r, err, result.Code)
 		return
 	}
 	// If no error, encode the body and the result code
@@ -134,24 +134,24 @@ func (c *TeacherApiController) GetHomeworkSubmissionsTeacher(w http.ResponseWrit
 	query := r.URL.Query()
 	homeworkIdParam, err := parseInt64Parameter(params["homeworkId"], true)
 	if err != nil {
-		c.errorHandler(w, r, &ParsingError{Err: err}, nil)
+		c.errorHandler(w, r, &ParsingError{Err: err}, 0)
 		return
 	}
 
 	offsetParam, err := parseInt32Parameter(query.Get("offset"), true)
 	if err != nil {
-		c.errorHandler(w, r, &ParsingError{Err: err}, nil)
+		c.errorHandler(w, r, &ParsingError{Err: err}, 0)
 		return
 	}
 	limitParam, err := parseInt32Parameter(query.Get("limit"), true)
 	if err != nil {
-		c.errorHandler(w, r, &ParsingError{Err: err}, nil)
+		c.errorHandler(w, r, &ParsingError{Err: err}, 0)
 		return
 	}
 	result, err := c.service.GetHomeworkSubmissionsTeacher(r.Context(), homeworkIdParam, offsetParam, limitParam)
 	// If an error occurred, encode the error with the status code
 	if err != nil {
-		c.errorHandler(w, r, err, &result)
+		c.errorHandler(w, r, err, result.Code)
 		return
 	}
 	// If no error, encode the body and the result code
@@ -164,18 +164,18 @@ func (c *TeacherApiController) GetHomeworksTeacher(w http.ResponseWriter, r *htt
 	query := r.URL.Query()
 	offsetParam, err := parseInt32Parameter(query.Get("offset"), true)
 	if err != nil {
-		c.errorHandler(w, r, &ParsingError{Err: err}, nil)
+		c.errorHandler(w, r, &ParsingError{Err: err}, 0)
 		return
 	}
 	limitParam, err := parseInt32Parameter(query.Get("limit"), true)
 	if err != nil {
-		c.errorHandler(w, r, &ParsingError{Err: err}, nil)
+		c.errorHandler(w, r, &ParsingError{Err: err}, 0)
 		return
 	}
 	result, err := c.service.GetHomeworksTeacher(r.Context(), offsetParam, limitParam)
 	// If an error occurred, encode the error with the status code
 	if err != nil {
-		c.errorHandler(w, r, err, &result)
+		c.errorHandler(w, r, err, result.Code)
 		return
 	}
 	// If no error, encode the body and the result code
@@ -188,14 +188,14 @@ func (c *TeacherApiController) GetSubmissionTeacher(w http.ResponseWriter, r *ht
 	params := mux.Vars(r)
 	submissionIdParam, err := parseInt64Parameter(params["submissionId"], true)
 	if err != nil {
-		c.errorHandler(w, r, &ParsingError{Err: err}, nil)
+		c.errorHandler(w, r, &ParsingError{Err: err}, 0)
 		return
 	}
 
 	result, err := c.service.GetSubmissionTeacher(r.Context(), submissionIdParam)
 	// If an error occurred, encode the error with the status code
 	if err != nil {
-		c.errorHandler(w, r, err, &result)
+		c.errorHandler(w, r, err, result.Code)
 		return
 	}
 	// If no error, encode the body and the result code

@@ -31,46 +31,46 @@ func NewTeacherApiService(submissionDao SubmissionDao, homeworkDao HomeworkDao) 
 }
 
 // AddHomeworkTeacher - Add new homework
-func (s *TeacherApiService) AddHomeworkTeacher(_ context.Context, newHomework NewHomework) (ImplResponse, error) {
+func (s *TeacherApiService) AddHomeworkTeacher(_ context.Context, newHomework NewHomework) (ImplResponse[Homework], error) {
 	homework := s.HomeworkDao.AddHomework(newHomework)
 	return Response(http.StatusOK, homework), nil
 }
 
 // GetHomeworkByIdTeacher - Get homework
-func (s *TeacherApiService) GetHomeworkByIdTeacher(_ context.Context, homeworkId int64) (ImplResponse, error) {
+func (s *TeacherApiService) GetHomeworkByIdTeacher(_ context.Context, homeworkId int64) (ImplResponse[Homework], error) {
 	homework := s.HomeworkDao.GetHomeworkById(homeworkId)
 	if homework == nil {
-		return Response(http.StatusNotFound, nil), errors.New(fmt.Sprintf("homework with id %d not found", homeworkId))
+		return Response(http.StatusNotFound, Homework{}), errors.New(fmt.Sprintf("homework with id %d not found", homeworkId))
 	}
-	return Response(http.StatusOK, homework), nil
+	return Response(http.StatusOK, *homework), nil
 }
 
 // GetHomeworkSubmissionsTeacher - Get homework submissions
-func (s *TeacherApiService) GetHomeworkSubmissionsTeacher(_ context.Context, homeworkId int64, offset int32, limit int32) (ImplResponse, error) {
+func (s *TeacherApiService) GetHomeworkSubmissionsTeacher(_ context.Context, homeworkId int64, offset int32, limit int32) (ImplResponse[[]Submission], error) {
 	if offset < 0 || limit < 0 {
-		return Response(http.StatusBadRequest, nil), errors.New("offset and limit must be non negative")
+		return Response[[]Submission](http.StatusBadRequest, nil), errors.New("offset and limit must be non negative")
 	}
 	if s.HomeworkDao.GetHomeworkById(homeworkId) == nil {
-		return Response(http.StatusNotFound, nil), errors.New(fmt.Sprintf("homework with id %d not found", homeworkId))
+		return Response[[]Submission](http.StatusNotFound, nil), errors.New(fmt.Sprintf("homework with id %d not found", homeworkId))
 	}
 	submissions := s.SubmissionDao.GetHomeworkSubmissions(homeworkId, offset, limit)
 	return Response(http.StatusOK, submissions), nil
 }
 
 // GetHomeworksTeacher - Get homeworks
-func (s *TeacherApiService) GetHomeworksTeacher(_ context.Context, offset int32, limit int32) (ImplResponse, error) {
+func (s *TeacherApiService) GetHomeworksTeacher(_ context.Context, offset int32, limit int32) (ImplResponse[[]Homework], error) {
 	if offset < 0 || limit < 0 {
-		return Response(http.StatusBadRequest, nil), errors.New("offset and limit must be non negative")
+		return Response[[]Homework](http.StatusBadRequest, nil), errors.New("offset and limit must be non negative")
 	}
 	homeworks := s.HomeworkDao.GetHomeworks(offset, limit, false)
 	return Response(200, homeworks), nil
 }
 
 // GetSubmissionTeacher - Get submission
-func (s *TeacherApiService) GetSubmissionTeacher(_ context.Context, submissionId int64) (ImplResponse, error) {
+func (s *TeacherApiService) GetSubmissionTeacher(_ context.Context, submissionId int64) (ImplResponse[Submission], error) {
 	submission := s.SubmissionDao.GetSubmissionById(submissionId)
 	if submission == nil {
-		return Response(http.StatusNotFound, nil), errors.New(fmt.Sprintf("submission with id %d not found", submissionId))
+		return Response(http.StatusNotFound, Submission{}), errors.New(fmt.Sprintf("submission with id %d not found", submissionId))
 	}
-	return Response(http.StatusOK, submission), nil
+	return Response(http.StatusOK, *submission), nil
 }

@@ -29,7 +29,7 @@ func NewStudentPagesApiService(studentApiService StudentApiServicer) StudentPage
 }
 
 // CreateSubmissionPageStudent - Get creating submission page
-func (s *StudentPagesApiService) CreateSubmissionPageStudent(ctx context.Context, homeworkId int64) (ImplResponse, error) {
+func (s *StudentPagesApiService) CreateSubmissionPageStudent(ctx context.Context, homeworkId int64) (ImplResponse[string], error) {
 	// TODO - update CreateSubmissionPageStudent with the required logic for this service method.
 	// Add api_student_pages_service.go to the .openapi-generator-ignore to avoid overwriting this service implementation when updating open api generation.
 
@@ -42,11 +42,11 @@ func (s *StudentPagesApiService) CreateSubmissionPageStudent(ctx context.Context
 	//TODO: Uncomment the next line to return response Response(404, {}) or use other options such as http.Ok ...
 	//return Response(404, nil),nil
 
-	return Response(http.StatusNotImplemented, nil), errors.New("CreateSubmissionPageStudent method not implemented")
+	return Response(http.StatusNotImplemented, ""), errors.New("CreateSubmissionPageStudent method not implemented")
 }
 
 // GetHomeworkPageStudent - Get homework page
-func (s *StudentPagesApiService) GetHomeworkPageStudent(ctx context.Context, homeworkId int64, page int32) (ImplResponse, error) {
+func (s *StudentPagesApiService) GetHomeworkPageStudent(ctx context.Context, homeworkId int64, page int32) (ImplResponse[string], error) {
 	// TODO - update GetHomeworkPageStudent with the required logic for this service method.
 	// Add api_student_pages_service.go to the .openapi-generator-ignore to avoid overwriting this service implementation when updating open api generation.
 
@@ -59,11 +59,11 @@ func (s *StudentPagesApiService) GetHomeworkPageStudent(ctx context.Context, hom
 	//TODO: Uncomment the next line to return response Response(404, {}) or use other options such as http.Ok ...
 	//return Response(404, nil),nil
 
-	return Response(http.StatusNotImplemented, nil), errors.New("GetHomeworkPageStudent method not implemented")
+	return Response(http.StatusNotImplemented, ""), errors.New("GetHomeworkPageStudent method not implemented")
 }
 
 // GetHomeworksPageStudent - Get homeworks page
-func (s *StudentPagesApiService) GetHomeworksPageStudent(ctx context.Context, page int32) (ImplResponse, error) {
+func (s *StudentPagesApiService) GetHomeworksPageStudent(ctx context.Context, page int32) (ImplResponse[string], error) {
 	// TODO - update GetHomeworksPageStudent with the required logic for this service method.
 	// Add api_student_pages_service.go to the .openapi-generator-ignore to avoid overwriting this service implementation when updating open api generation.
 
@@ -76,11 +76,11 @@ func (s *StudentPagesApiService) GetHomeworksPageStudent(ctx context.Context, pa
 	//TODO: Uncomment the next line to return response Response(404, {}) or use other options such as http.Ok ...
 	//return Response(404, nil),nil
 
-	return Response(http.StatusNotImplemented, nil), errors.New("GetHomeworksPageStudent method not implemented")
+	return Response(http.StatusNotImplemented, ""), errors.New("GetHomeworksPageStudent method not implemented")
 }
 
 // GetSubmissionPageStudent - Get submission page
-func (s *StudentPagesApiService) GetSubmissionPageStudent(ctx context.Context, submissionId int64) (ImplResponse, error) {
+func (s *StudentPagesApiService) GetSubmissionPageStudent(ctx context.Context, submissionId int64) (ImplResponse[string], error) {
 	// TODO - update GetSubmissionPageStudent with the required logic for this service method.
 	// Add api_student_pages_service.go to the .openapi-generator-ignore to avoid overwriting this service implementation when updating open api generation.
 
@@ -93,5 +93,5 @@ func (s *StudentPagesApiService) GetSubmissionPageStudent(ctx context.Context, s
 	//TODO: Uncomment the next line to return response Response(404, {}) or use other options such as http.Ok ...
 	//return Response(404, nil),nil
 
-	return Response(http.StatusNotImplemented, nil), errors.New("GetSubmissionPageStudent method not implemented")
+	return Response(http.StatusNotImplemented, ""), errors.New("GetSubmissionPageStudent method not implemented")
 }

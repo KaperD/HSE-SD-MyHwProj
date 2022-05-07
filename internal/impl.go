@@ -11,7 +11,7 @@
 package myhwproj
 
 //Implementation response defines an error code with the associated body
-type ImplResponse struct {
+type ImplResponse[T any] struct {
 	Code int
-	Body interface{}
+	Body T
 }

@@ -15,93 +15,90 @@ import (
 	"net/http"
 )
 
-
-
 // StudentApiRouter defines the required methods for binding the api requests to a responses for the StudentApi
 // The StudentApiRouter implementation should parse necessary information from the http request,
 // pass the data to a StudentApiServicer to perform the required actions, then write the service results to the http response.
-type StudentApiRouter interface { 
+type StudentApiRouter interface {
 	AddSubmissionStudent(http.ResponseWriter, *http.Request)
 	GetHomeworkByIdStudent(http.ResponseWriter, *http.Request)
 	GetHomeworkSubmissionsStudent(http.ResponseWriter, *http.Request)
 	GetHomeworksStudent(http.ResponseWriter, *http.Request)
 	GetSubmissionStudent(http.ResponseWriter, *http.Request)
 }
+
 // StudentPagesApiRouter defines the required methods for binding the api requests to a responses for the StudentPagesApi
 // The StudentPagesApiRouter implementation should parse necessary information from the http request,
 // pass the data to a StudentPagesApiServicer to perform the required actions, then write the service results to the http response.
-type StudentPagesApiRouter interface { 
+type StudentPagesApiRouter interface {
 	CreateSubmissionPageStudent(http.ResponseWriter, *http.Request)
 	GetHomeworkPageStudent(http.ResponseWriter, *http.Request)
 	GetHomeworksPageStudent(http.ResponseWriter, *http.Request)
 	GetSubmissionPageStudent(http.ResponseWriter, *http.Request)
 }
+
 // TeacherApiRouter defines the required methods for binding the api requests to a responses for the TeacherApi
 // The TeacherApiRouter implementation should parse necessary information from the http request,
 // pass the data to a TeacherApiServicer to perform the required actions, then write the service results to the http response.
-type TeacherApiRouter interface { 
+type TeacherApiRouter interface {
 	AddHomeworkTeacher(http.ResponseWriter, *http.Request)
 	GetHomeworkByIdTeacher(http.ResponseWriter, *http.Request)
 	GetHomeworkSubmissionsTeacher(http.ResponseWriter, *http.Request)
 	GetHomeworksTeacher(http.ResponseWriter, *http.Request)
 	GetSubmissionTeacher(http.ResponseWriter, *http.Request)
 }
+
 // TeacherPagesApiRouter defines the required methods for binding the api requests to a responses for the TeacherPagesApi
 // The TeacherPagesApiRouter implementation should parse necessary information from the http request,
 // pass the data to a TeacherPagesApiServicer to perform the required actions, then write the service results to the http response.
-type TeacherPagesApiRouter interface { 
+type TeacherPagesApiRouter interface {
 	CreateHomeworkPageTeacher(http.ResponseWriter, *http.Request)
 	GetHomeworkPageTeacher(http.ResponseWriter, *http.Request)
 	GetHomeworksPageTeacher(http.ResponseWriter, *http.Request)
 	GetSubmissionPageTeacher(http.ResponseWriter, *http.Request)
 }
 
-
 // StudentApiServicer defines the api actions for the StudentApi service
 // This interface intended to stay up to date with the openapi yaml used to generate it,
 // while the service implementation can ignored with the .openapi-generator-ignore file
 // and updated with the logic required for the API.
-type StudentApiServicer interface { 
-	AddSubmissionStudent(context.Context, int64, NewSubmission) (ImplResponse, error)
-	GetHomeworkByIdStudent(context.Context, int64) (ImplResponse, error)
-	GetHomeworkSubmissionsStudent(context.Context, int64, int32, int32) (ImplResponse, error)
-	GetHomeworksStudent(context.Context, int32, int32) (ImplResponse, error)
-	GetSubmissionStudent(context.Context, int64) (ImplResponse, error)
+type StudentApiServicer interface {
+	AddSubmissionStudent(context.Context, int64, NewSubmission) (ImplResponse[Submission], error)
+	GetHomeworkByIdStudent(context.Context, int64) (ImplResponse[Homework], error)
+	GetHomeworkSubmissionsStudent(context.Context, int64, int32, int32) (ImplResponse[[]Submission], error)
+	GetHomeworksStudent(context.Context, int32, int32) (ImplResponse[[]Homework], error)
+	GetSubmissionStudent(context.Context, int64) (ImplResponse[Submission], error)
 }
-
 
 // StudentPagesApiServicer defines the api actions for the StudentPagesApi service
 // This interface intended to stay up to date with the openapi yaml used to generate it,
 // while the service implementation can ignored with the .openapi-generator-ignore file
 // and updated with the logic required for the API.
-type StudentPagesApiServicer interface { 
-	CreateSubmissionPageStudent(context.Context, int64) (ImplResponse, error)
-	GetHomeworkPageStudent(context.Context, int64, int32) (ImplResponse, error)
-	GetHomeworksPageStudent(context.Context, int32) (ImplResponse, error)
-	GetSubmissionPageStudent(context.Context, int64) (ImplResponse, error)
+type StudentPagesApiServicer interface {
+	CreateSubmissionPageStudent(context.Context, int64) (ImplResponse[string], error)
+	GetHomeworkPageStudent(context.Context, int64, int32) (ImplResponse[string], error)
+	GetHomeworksPageStudent(context.Context, int32) (ImplResponse[string], error)
+	GetSubmissionPageStudent(context.Context, int64) (ImplResponse[string], error)
 }
-
 
 // TeacherApiServicer defines the api actions for the TeacherApi service
 // This interface intended to stay up to date with the openapi yaml used to generate it,
 // while the service implementation can ignored with the .openapi-generator-ignore file
 // and updated with the logic required for the API.
-type TeacherApiServicer interface { 
-	AddHomeworkTeacher(context.Context, NewHomework) (ImplResponse, error)
-	GetHomeworkByIdTeacher(context.Context, int64) (ImplResponse, error)
-	GetHomeworkSubmissionsTeacher(context.Context, int64, int32, int32) (ImplResponse, error)
-	GetHomeworksTeacher(context.Context, int32, int32) (ImplResponse, error)
-	GetSubmissionTeacher(context.Context, int64) (ImplResponse, error)
+type TeacherApiServicer interface {
+	AddHomeworkTeacher(context.Context, NewHomework) (ImplResponse[Homework], error)
+	GetHomeworkByIdTeacher(context.Context, int64) (ImplResponse[Homework], error)
+	GetHomeworkSubmissionsTeacher(context.Context, int64, int32, int32) (ImplResponse[[]Submission], error)
+	GetHomeworksTeacher(context.Context, int32, int32) (ImplResponse[[]Homework], error)
+	GetSubmissionTeacher(context.Context, int64) (ImplResponse[Submission], error)
 }
-
 
 // TeacherPagesApiServicer defines the api actions for the TeacherPagesApi service
 // This interface intended to stay up to date with the openapi yaml used to generate it,
 // while the service implementation can ignored with the .openapi-generator-ignore file
 // and updated with the logic required for the API.
-type TeacherPagesApiServicer interface { 
-	CreateHomeworkPageTeacher(context.Context) (ImplResponse, error)
-	GetHomeworkPageTeacher(context.Context, int64, int32) (ImplResponse, error)
-	GetHomeworksPageTeacher(context.Context, int32) (ImplResponse, error)
-	GetSubmissionPageTeacher(context.Context, int64) (ImplResponse, error)
+type TeacherPagesApiServicer interface {
+	CreateHomeworkPageTeacher(context.Context) (ImplResponse[string], error)
+	GetHomeworkPageTeacher(context.Context, int64, int32) (ImplResponse[string], error)
+	GetHomeworksPageTeacher(context.Context, int32) (ImplResponse[string], error)
+	GetSubmissionPageTeacher(context.Context, int64) (ImplResponse[string], error)
 }

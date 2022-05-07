@@ -82,14 +82,14 @@ func (c *StudentPagesApiController) CreateSubmissionPageStudent(w http.ResponseW
 	params := mux.Vars(r)
 	homeworkIdParam, err := parseInt64Parameter(params["homeworkId"], true)
 	if err != nil {
-		c.errorHandler(w, r, &ParsingError{Err: err}, nil)
+		c.errorHandler(w, r, &ParsingError{Err: err}, 0)
 		return
 	}
 
 	result, err := c.service.CreateSubmissionPageStudent(r.Context(), homeworkIdParam)
 	// If an error occurred, encode the error with the status code
 	if err != nil {
-		c.errorHandler(w, r, err, &result)
+		c.errorHandler(w, r, err, result.Code)
 		return
 	}
 	// If no error, encode the body and the result code
@@ -103,19 +103,19 @@ func (c *StudentPagesApiController) GetHomeworkPageStudent(w http.ResponseWriter
 	query := r.URL.Query()
 	homeworkIdParam, err := parseInt64Parameter(params["homeworkId"], true)
 	if err != nil {
-		c.errorHandler(w, r, &ParsingError{Err: err}, nil)
+		c.errorHandler(w, r, &ParsingError{Err: err}, 0)
 		return
 	}
 
 	pageParam, err := parseInt32Parameter(query.Get("page"), false)
 	if err != nil {
-		c.errorHandler(w, r, &ParsingError{Err: err}, nil)
+		c.errorHandler(w, r, &ParsingError{Err: err}, 0)
 		return
 	}
 	result, err := c.service.GetHomeworkPageStudent(r.Context(), homeworkIdParam, pageParam)
 	// If an error occurred, encode the error with the status code
 	if err != nil {
-		c.errorHandler(w, r, err, &result)
+		c.errorHandler(w, r, err, result.Code)
 		return
 	}
 	// If no error, encode the body and the result code
@@ -128,13 +128,13 @@ func (c *StudentPagesApiController) GetHomeworksPageStudent(w http.ResponseWrite
 	query := r.URL.Query()
 	pageParam, err := parseInt32Parameter(query.Get("page"), false)
 	if err != nil {
-		c.errorHandler(w, r, &ParsingError{Err: err}, nil)
+		c.errorHandler(w, r, &ParsingError{Err: err}, 0)
 		return
 	}
 	result, err := c.service.GetHomeworksPageStudent(r.Context(), pageParam)
 	// If an error occurred, encode the error with the status code
 	if err != nil {
-		c.errorHandler(w, r, err, &result)
+		c.errorHandler(w, r, err, result.Code)
 		return
 	}
 	// If no error, encode the body and the result code
@@ -147,14 +147,14 @@ func (c *StudentPagesApiController) GetSubmissionPageStudent(w http.ResponseWrit
 	params := mux.Vars(r)
 	submissionIdParam, err := parseInt64Parameter(params["submissionId"], true)
 	if err != nil {
-		c.errorHandler(w, r, &ParsingError{Err: err}, nil)
+		c.errorHandler(w, r, &ParsingError{Err: err}, 0)
 		return
 	}
 
 	result, err := c.service.GetSubmissionPageStudent(r.Context(), submissionIdParam)
 	// If an error occurred, encode the error with the status code
 	if err != nil {
-		c.errorHandler(w, r, err, &result)
+		c.errorHandler(w, r, err, result.Code)
 		return
 	}
 	// If no error, encode the body and the result code

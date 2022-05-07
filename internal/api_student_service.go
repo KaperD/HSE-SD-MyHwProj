@@ -32,49 +32,49 @@ func NewStudentApiService(submissionDao SubmissionDao, homeworkDao HomeworkDao) 
 }
 
 // AddSubmissionStudent - Add new submission
-func (s *StudentApiService) AddSubmissionStudent(_ context.Context, homeworkId int64, newSubmission NewSubmission) (ImplResponse, error) {
+func (s *StudentApiService) AddSubmissionStudent(_ context.Context, homeworkId int64, newSubmission NewSubmission) (ImplResponse[Submission], error) {
 	if homework := s.HomeworkDao.GetHomeworkById(homeworkId); homework == nil || homework.PublicationDatetime.After(time.Now()) {
-		return Response(http.StatusNotFound, nil), errors.New(fmt.Sprintf("homework with id %d not found", homeworkId))
+		return Response(http.StatusNotFound, Submission{}), errors.New(fmt.Sprintf("homework with id %d not found", homeworkId))
 	}
 	submission := s.SubmissionDao.AddSubmission(homeworkId, newSubmission)
 	return Response(200, submission), nil
 }
 
 // GetHomeworkByIdStudent - Get homework
-func (s *StudentApiService) GetHomeworkByIdStudent(_ context.Context, homeworkId int64) (ImplResponse, error) {
+func (s *StudentApiService) GetHomeworkByIdStudent(_ context.Context, homeworkId int64) (ImplResponse[Homework], error) {
 	homework := s.HomeworkDao.GetHomeworkById(homeworkId)
 	if homework == nil || homework.PublicationDatetime.After(time.Now()) {
-		return Response(http.StatusNotFound, nil), errors.New(fmt.Sprintf("homework with id %d not found", homeworkId))
+		return Response(http.StatusNotFound, Homework{}), errors.New(fmt.Sprintf("homework with id %d not found", homeworkId))
 	}
-	return Response(200, homework), nil
+	return Response(200, *homework), nil
 }
 
 // GetHomeworkSubmissionsStudent - Get homework submissions
-func (s *StudentApiService) GetHomeworkSubmissionsStudent(_ context.Context, homeworkId int64, offset int32, limit int32) (ImplResponse, error) {
+func (s *StudentApiService) GetHomeworkSubmissionsStudent(_ context.Context, homeworkId int64, offset int32, limit int32) (ImplResponse[[]Submission], error) {
 	if offset < 0 || limit < 0 {
-		return Response(http.StatusBadRequest, nil), errors.New("offset and limit must be non negative")
+		return Response[[]Submission](http.StatusBadRequest, nil), errors.New("offset and limit must be non negative")
 	}
 	if homework := s.HomeworkDao.GetHomeworkById(homeworkId); homework == nil || homework.PublicationDatetime.After(time.Now()) {
-		return Response(http.StatusNotFound, nil), errors.New(fmt.Sprintf("homework with id %d not found", homeworkId))
+		return Response[[]Submission](http.StatusNotFound, nil), errors.New(fmt.Sprintf("homework with id %d not found", homeworkId))
 	}
 	submissions := s.SubmissionDao.GetHomeworkSubmissions(homeworkId, offset, limit)
 	return Response(200, submissions), nil
 }
 
 // GetHomeworksStudent - Get homeworks
-func (s *StudentApiService) GetHomeworksStudent(_ context.Context, offset int32, limit int32) (ImplResponse, error) {
+func (s *StudentApiService) GetHomeworksStudent(_ context.Context, offset int32, limit int32) (ImplResponse[[]Homework], error) {
 	if offset < 0 || limit < 0 {
-		return Response(http.StatusBadRequest, nil), errors.New("offset and limit must be non negative")
+		return Response[[]Homework](http.StatusBadRequest, nil), errors.New("offset and limit must be non negative")
 	}
 	homeworks := s.HomeworkDao.GetHomeworks(offset, limit, true)
 	return Response(200, homeworks), nil
 }
 
 // GetSubmissionStudent - Get submission
-func (s *StudentApiService) GetSubmissionStudent(_ context.Context, submissionId int64) (ImplResponse, error) {
+func (s *StudentApiService) GetSubmissionStudent(_ context.Context, submissionId int64) (ImplResponse[Submission], error) {
 	submission := s.SubmissionDao.GetSubmissionById(submissionId)
 	if submission == nil {
-		return Response(http.StatusNotFound, nil), errors.New(fmt.Sprintf("submission with id %d not found", submissionId))
+		return Response(http.StatusNotFound, Submission{}), errors.New(fmt.Sprintf("submission with id %d not found", submissionId))
 	}
-	return Response(http.StatusOK, submission), nil
+	return Response(http.StatusOK, *submission), nil
 }

@@ -20,7 +20,7 @@ import (
 
 // StudentApiController binds http requests to an api service and writes the service results to the http response
 type StudentApiController struct {
-	service StudentApiServicer
+	service      StudentApiServicer
 	errorHandler ErrorHandler
 }
 
@@ -50,7 +50,7 @@ func NewStudentApiController(s StudentApiServicer, opts ...StudentApiOption) Rou
 
 // Routes returns all of the api route for the StudentApiController
 func (c *StudentApiController) Routes() Routes {
-	return Routes{ 
+	return Routes{
 		{
 			"AddSubmissionStudent",
 			strings.ToUpper("Post"),
@@ -89,7 +89,7 @@ func (c *StudentApiController) AddSubmissionStudent(w http.ResponseWriter, r *ht
 	params := mux.Vars(r)
 	homeworkIdParam, err := parseInt64Parameter(params["homeworkId"], true)
 	if err != nil {
-		c.errorHandler(w, r, &ParsingError{Err: err}, nil)
+		c.errorHandler(w, r, &ParsingError{Err: err}, 0)
 		return
 	}
 
@@ -97,17 +97,17 @@ func (c *StudentApiController) AddSubmissionStudent(w http.ResponseWriter, r *ht
 	d := json.NewDecoder(r.Body)
 	d.DisallowUnknownFields()
 	if err := d.Decode(&newSubmissionParam); err != nil {
-		c.errorHandler(w, r, &ParsingError{Err: err}, nil)
+		c.errorHandler(w, r, &ParsingError{Err: err}, 0)
 		return
 	}
 	if err := AssertNewSubmissionRequired(newSubmissionParam); err != nil {
-		c.errorHandler(w, r, err, nil)
+		c.errorHandler(w, r, err, 0)
 		return
 	}
 	result, err := c.service.AddSubmissionStudent(r.Context(), homeworkIdParam, newSubmissionParam)
 	// If an error occurred, encode the error with the status code
 	if err != nil {
-		c.errorHandler(w, r, err, &result)
+		c.errorHandler(w, r, err, result.Code)
 		return
 	}
 	// If no error, encode the body and the result code
@@ -120,14 +120,14 @@ func (c *StudentApiController) GetHomeworkByIdStudent(w http.ResponseWriter, r *
 	params := mux.Vars(r)
 	homeworkIdParam, err := parseInt64Parameter(params["homeworkId"], true)
 	if err != nil {
-		c.errorHandler(w, r, &ParsingError{Err: err}, nil)
+		c.errorHandler(w, r, &ParsingError{Err: err}, 0)
 		return
 	}
 
 	result, err := c.service.GetHomeworkByIdStudent(r.Context(), homeworkIdParam)
 	// If an error occurred, encode the error with the status code
 	if err != nil {
-		c.errorHandler(w, r, err, &result)
+		c.errorHandler(w, r, err, result.Code)
 		return
 	}
 	// If no error, encode the body and the result code
@@ -141,24 +141,24 @@ func (c *StudentApiController) GetHomeworkSubmissionsStudent(w http.ResponseWrit
 	query := r.URL.Query()
 	homeworkIdParam, err := parseInt64Parameter(params["homeworkId"], true)
 	if err != nil {
-		c.errorHandler(w, r, &ParsingError{Err: err}, nil)
+		c.errorHandler(w, r, &ParsingError{Err: err}, 0)
 		return
 	}
 
 	offsetParam, err := parseInt32Parameter(query.Get("offset"), true)
 	if err != nil {
-		c.errorHandler(w, r, &ParsingError{Err: err}, nil)
+		c.errorHandler(w, r, &ParsingError{Err: err}, 0)
 		return
 	}
 	limitParam, err := parseInt32Parameter(query.Get("limit"), true)
 	if err != nil {
-		c.errorHandler(w, r, &ParsingError{Err: err}, nil)
+		c.errorHandler(w, r, &ParsingError{Err: err}, 0)
 		return
 	}
 	result, err := c.service.GetHomeworkSubmissionsStudent(r.Context(), homeworkIdParam, offsetParam, limitParam)
 	// If an error occurred, encode the error with the status code
 	if err != nil {
-		c.errorHandler(w, r, err, &result)
+		c.errorHandler(w, r, err, result.Code)
 		return
 	}
 	// If no error, encode the body and the result code
@@ -171,18 +171,18 @@ func (c *StudentApiController) GetHomeworksStudent(w http.ResponseWriter, r *htt
 	query := r.URL.Query()
 	offsetParam, err := parseInt32Parameter(query.Get("offset"), true)
 	if err != nil {
-		c.errorHandler(w, r, &ParsingError{Err: err}, nil)
+		c.errorHandler(w, r, &ParsingError{Err: err}, 0)
 		return
 	}
 	limitParam, err := parseInt32Parameter(query.Get("limit"), true)
 	if err != nil {
-		c.errorHandler(w, r, &ParsingError{Err: err}, nil)
+		c.errorHandler(w, r, &ParsingError{Err: err}, 0)
 		return
 	}
 	result, err := c.service.GetHomeworksStudent(r.Context(), offsetParam, limitParam)
 	// If an error occurred, encode the error with the status code
 	if err != nil {
-		c.errorHandler(w, r, err, &result)
+		c.errorHandler(w, r, err, result.Code)
 		return
 	}
 	// If no error, encode the body and the result code
@@ -195,14 +195,14 @@ func (c *StudentApiController) GetSubmissionStudent(w http.ResponseWriter, r *ht
 	params := mux.Vars(r)
 	submissionIdParam, err := parseInt64Parameter(params["submissionId"], true)
 	if err != nil {
-		c.errorHandler(w, r, &ParsingError{Err: err}, nil)
+		c.errorHandler(w, r, &ParsingError{Err: err}, 0)
 		return
 	}
 
 	result, err := c.service.GetSubmissionStudent(r.Context(), submissionIdParam)
 	// If an error occurred, encode the error with the status code
 	if err != nil {
-		c.errorHandler(w, r, err, &result)
+		c.errorHandler(w, r, err, result.Code)
 		return
 	}
 	// If no error, encode the body and the result code

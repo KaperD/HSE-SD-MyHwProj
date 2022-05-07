@@ -15,8 +15,8 @@ import (
 )
 
 // Response return a ImplResponse struct filled
-func Response(code int, body interface{}) ImplResponse {
-	return ImplResponse {
+func Response[T any](code int, body T) ImplResponse[T] {
+	return ImplResponse[T]{
 		Code: code,
 		Body: body,
 	}

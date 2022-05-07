@@ -29,18 +29,18 @@ func NewTeacherPagesApiService(teacherApiService TeacherApiServicer) TeacherPage
 }
 
 // CreateHomeworkPageTeacher - Get creating homework page
-func (s *TeacherPagesApiService) CreateHomeworkPageTeacher(ctx context.Context) (ImplResponse, error) {
+func (s *TeacherPagesApiService) CreateHomeworkPageTeacher(ctx context.Context) (ImplResponse[string], error) {
 	// TODO - update CreateHomeworkPageTeacher with the required logic for this service method.
 	// Add api_teacher_pages_service.go to the .openapi-generator-ignore to avoid overwriting this service implementation when updating open api generation.
 
 	//TODO: Uncomment the next line to return response Response(200, {}) or use other options such as http.Ok ...
 	//return Response(200, nil),nil
 
-	return Response(http.StatusNotImplemented, nil), errors.New("CreateHomeworkPageTeacher method not implemented")
+	return Response(http.StatusNotImplemented, ""), errors.New("CreateHomeworkPageTeacher method not implemented")
 }
 
 // GetHomeworkPageTeacher - Get homework page
-func (s *TeacherPagesApiService) GetHomeworkPageTeacher(ctx context.Context, homeworkId int64, page int32) (ImplResponse, error) {
+func (s *TeacherPagesApiService) GetHomeworkPageTeacher(ctx context.Context, homeworkId int64, page int32) (ImplResponse[string], error) {
 	// TODO - update GetHomeworkPageTeacher with the required logic for this service method.
 	// Add api_teacher_pages_service.go to the .openapi-generator-ignore to avoid overwriting this service implementation when updating open api generation.
 
@@ -53,11 +53,11 @@ func (s *TeacherPagesApiService) GetHomeworkPageTeacher(ctx context.Context, hom
 	//TODO: Uncomment the next line to return response Response(404, {}) or use other options such as http.Ok ...
 	//return Response(404, nil),nil
 
-	return Response(http.StatusNotImplemented, nil), errors.New("GetHomeworkPageTeacher method not implemented")
+	return Response(http.StatusNotImplemented, ""), errors.New("GetHomeworkPageTeacher method not implemented")
 }
 
 // GetHomeworksPageTeacher - Get homeworks page
-func (s *TeacherPagesApiService) GetHomeworksPageTeacher(ctx context.Context, page int32) (ImplResponse, error) {
+func (s *TeacherPagesApiService) GetHomeworksPageTeacher(ctx context.Context, page int32) (ImplResponse[string], error) {
 	// TODO - update GetHomeworksPageTeacher with the required logic for this service method.
 	// Add api_teacher_pages_service.go to the .openapi-generator-ignore to avoid overwriting this service implementation when updating open api generation.
 
@@ -70,11 +70,11 @@ func (s *TeacherPagesApiService) GetHomeworksPageTeacher(ctx context.Context, pa
 	//TODO: Uncomment the next line to return response Response(404, {}) or use other options such as http.Ok ...
 	//return Response(404, nil),nil
 
-	return Response(http.StatusNotImplemented, nil), errors.New("GetHomeworksPageTeacher method not implemented")
+	return Response(http.StatusNotImplemented, ""), errors.New("GetHomeworksPageTeacher method not implemented")
 }
 
 // GetSubmissionPageTeacher - Get submission page
-func (s *TeacherPagesApiService) GetSubmissionPageTeacher(ctx context.Context, submissionId int64) (ImplResponse, error) {
+func (s *TeacherPagesApiService) GetSubmissionPageTeacher(ctx context.Context, submissionId int64) (ImplResponse[string], error) {
 	// TODO - update GetSubmissionPageTeacher with the required logic for this service method.
 	// Add api_teacher_pages_service.go to the .openapi-generator-ignore to avoid overwriting this service implementation when updating open api generation.
 
@@ -87,5 +87,5 @@ func (s *TeacherPagesApiService) GetSubmissionPageTeacher(ctx context.Context, s
 	//TODO: Uncomment the next line to return response Response(404, {}) or use other options such as http.Ok ...
 	//return Response(404, nil),nil
 
-	return Response(http.StatusNotImplemented, nil), errors.New("GetSubmissionPageTeacher method not implemented")
+	return Response(http.StatusNotImplemented, ""), errors.New("GetSubmissionPageTeacher method not implemented")
 }

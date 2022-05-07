@@ -45,11 +45,11 @@ func (e *RequiredError) Error() string {
 
 // ErrorHandler defines the required method for handling error. You may implement it and inject this into a controller if
 // you would like errors to be handled differently from the DefaultErrorHandler
-type ErrorHandler func(w http.ResponseWriter, r *http.Request, err error, result *ImplResponse)
+type ErrorHandler func(w http.ResponseWriter, r *http.Request, err error, code int)
 
 // DefaultErrorHandler defines the default logic on how to handle errors from the controller. Any errors from parsing
 // request params will return a StatusBadRequest. Otherwise, the error code originating from the servicer will be used.
-func DefaultErrorHandler(w http.ResponseWriter, r *http.Request, err error, result *ImplResponse) {
+func DefaultErrorHandler(w http.ResponseWriter, r *http.Request, err error, code int) {
 	if _, ok := err.(*ParsingError); ok {
 		// Handle parsing errors
 		EncodeJSONResponse(err.Error(), func(i int) *int { return &i }(http.StatusBadRequest), w)
@@ -58,6 +58,6 @@ func DefaultErrorHandler(w http.ResponseWriter, r *http.Request, err error, resu
 		EncodeJSONResponse(err.Error(), func(i int) *int { return &i }(http.StatusUnprocessableEntity), w)
 	} else {
 		// Handle all other errors
-		EncodeJSONResponse(err.Error(), &result.Code, w)
+		EncodeJSONResponse(err.Error(), &code, w)
 	}
 }
