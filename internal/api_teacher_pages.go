@@ -11,7 +11,6 @@
 package myhwproj
 
 import (
-	"encoding/json"
 	"net/http"
 	"strings"
 
@@ -20,7 +19,7 @@ import (
 
 // TeacherPagesApiController binds http requests to an api service and writes the service results to the http response
 type TeacherPagesApiController struct {
-	service TeacherPagesApiServicer
+	service      TeacherPagesApiServicer
 	errorHandler ErrorHandler
 }
 
@@ -50,7 +49,7 @@ func NewTeacherPagesApiController(s TeacherPagesApiServicer, opts ...TeacherPage
 
 // Routes returns all of the api route for the TeacherPagesApiController
 func (c *TeacherPagesApiController) Routes() Routes {
-	return Routes{ 
+	return Routes{
 		{
 			"CreateHomeworkPageTeacher",
 			strings.ToUpper("Get"),
