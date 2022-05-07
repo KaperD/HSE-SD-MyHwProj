@@ -42,14 +42,13 @@ type Router interface {
 const errMsgRequiredMissing = "required parameter is missing"
 
 // NewRouter creates a new router for any number of api routers
-func NewRouter(routers ...Router) *mux.Router {
+func NewRouter(routers ...Router) http.Handler {
 	router := mux.NewRouter().StrictSlash(true)
 	for _, api := range routers {
 		for _, route := range api.Routes() {
 			var handler http.Handler
 			handler = route.HandlerFunc
 			handler = Logger(handler, route.Name)
-			handler = handlers.CORS()(handler)
 
 			router.
 				Methods(route.Method).
@@ -59,7 +58,8 @@ func NewRouter(routers ...Router) *mux.Router {
 		}
 	}
 
-	return router
+	allowedHeaders := handlers.AllowedHeaders([]string{"Content-Type"})
+	return handlers.CORS(allowedHeaders)(router)
 }
 
 // EncodeJSONResponse uses the json encoder to write an interface to the http response with an optional status code
