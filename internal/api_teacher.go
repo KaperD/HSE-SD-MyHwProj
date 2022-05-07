@@ -27,13 +27,6 @@ type TeacherApiController struct {
 // TeacherApiOption for how the controller is set up.
 type TeacherApiOption func(*TeacherApiController)
 
-// WithTeacherApiErrorHandler inject ErrorHandler into controller
-func WithTeacherApiErrorHandler(h ErrorHandler) TeacherApiOption {
-	return func(c *TeacherApiController) {
-		c.errorHandler = h
-	}
-}
-
 // NewTeacherApiController creates a default api controller
 func NewTeacherApiController(s TeacherApiServicer, opts ...TeacherApiOption) Router {
 	controller := &TeacherApiController{
