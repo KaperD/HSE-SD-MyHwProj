@@ -1,6 +1,8 @@
-FROM golang:1.10 AS build
+FROM golang:1.18 AS build
 WORKDIR /go/src
 COPY internal ./internal
+COPY go.mod .
+COPY go.sum .
 COPY main.go .
 
 ENV CGO_ENABLED=0
