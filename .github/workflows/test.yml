@@ -27,7 +27,7 @@ jobs:
           name: test-report-${{ matrix.os }}
           path: cover.html
       - name: Upload a test coverage report to Codecov
-        if: ${{ always() }}
+        if: ${{ matrix.os == 'ubuntu-latest' }}
         uses: codecov/codecov-action@v2
         with:
           files: cover.out

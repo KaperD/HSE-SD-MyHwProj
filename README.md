@@ -1,4 +1,5 @@
 # Go API Server for myhwproj
+[![codecov](https://codecov.io/gh/KaperD/HSE-SD-MyHwProj/branch/02-impl/graph/badge.svg?token=TPI8LNSA9E)](https://codecov.io/gh/KaperD/HSE-SD-MyHwProj)
 
 REST api for MyHwProj
 
