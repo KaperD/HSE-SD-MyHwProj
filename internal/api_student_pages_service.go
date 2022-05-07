@@ -11,8 +11,11 @@
 package myhwproj
 
 import (
+	"bytes"
 	"context"
 	"errors"
+	"html/template"
+	"log"
 	"net/http"
 )
 
@@ -30,19 +33,26 @@ func NewStudentPagesApiService(studentApiService StudentApiServicer) StudentPage
 
 // CreateSubmissionPageStudent - Get creating submission page
 func (s *StudentPagesApiService) CreateSubmissionPageStudent(ctx context.Context, homeworkId int64) (ImplResponse[string], error) {
-	// TODO - update CreateSubmissionPageStudent with the required logic for this service method.
-	// Add api_student_pages_service.go to the .openapi-generator-ignore to avoid overwriting this service implementation when updating open api generation.
+	result, err := s.StudentApiService.GetHomeworkByIdStudent(ctx, homeworkId)
+	var homework *Homework
+	if err == nil {
+		homework = &result.Body
+	}
+	files := []string{
+		"./ui/html/home.page.tmpl",
+		"./ui/html/base.layout.tmpl",
+	}
+	ts, err := template.ParseFiles(files...)
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	//TODO: Uncomment the next line to return response Response(200, {}) or use other options such as http.Ok ...
-	//return Response(200, nil),nil
-
-	//TODO: Uncomment the next line to return response Response(400, {}) or use other options such as http.Ok ...
-	//return Response(400, nil),nil
-
-	//TODO: Uncomment the next line to return response Response(404, {}) or use other options such as http.Ok ...
-	//return Response(404, nil),nil
-
-	return Response(http.StatusNotImplemented, ""), errors.New("CreateSubmissionPageStudent method not implemented")
+	buf := new(bytes.Buffer)
+	err = ts.Execute(buf, homework)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return Response(200, buf.String()), nil
 }
 
 // GetHomeworkPageStudent - Get homework page
