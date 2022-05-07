@@ -37,7 +37,7 @@ func (s *StudentApiService) AddSubmissionStudent(_ context.Context, homeworkId i
 		return Response(http.StatusNotFound, Submission{}), errors.New(fmt.Sprintf("homework with id %d not found", homeworkId))
 	}
 	submission := s.SubmissionDao.AddSubmission(homeworkId, newSubmission)
-	return Response(200, submission), nil
+	return Response(http.StatusOK, submission), nil
 }
 
 // GetHomeworkByIdStudent - Get homework
@@ -46,7 +46,7 @@ func (s *StudentApiService) GetHomeworkByIdStudent(_ context.Context, homeworkId
 	if homework == nil || homework.PublicationDatetime.After(time.Now()) {
 		return Response(http.StatusNotFound, Homework{}), errors.New(fmt.Sprintf("homework with id %d not found", homeworkId))
 	}
-	return Response(200, *homework), nil
+	return Response(http.StatusOK, *homework), nil
 }
 
 // GetHomeworkSubmissionsStudent - Get homework submissions
@@ -58,7 +58,7 @@ func (s *StudentApiService) GetHomeworkSubmissionsStudent(_ context.Context, hom
 		return Response[[]Submission](http.StatusNotFound, nil), errors.New(fmt.Sprintf("homework with id %d not found", homeworkId))
 	}
 	submissions := s.SubmissionDao.GetHomeworkSubmissions(homeworkId, offset, limit)
-	return Response(200, submissions), nil
+	return Response(http.StatusOK, submissions), nil
 }
 
 // GetHomeworksStudent - Get homeworks
@@ -67,7 +67,7 @@ func (s *StudentApiService) GetHomeworksStudent(_ context.Context, offset int32,
 		return Response[[]Homework](http.StatusBadRequest, nil), errors.New("offset and limit must be non negative")
 	}
 	homeworks := s.HomeworkDao.GetHomeworks(offset, limit, true)
-	return Response(200, homeworks), nil
+	return Response(http.StatusOK, homeworks), nil
 }
 
 // GetSubmissionStudent - Get submission

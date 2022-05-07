@@ -52,7 +52,7 @@ func (s *StudentPagesApiService) CreateSubmissionPageStudent(ctx context.Context
 	if err != nil {
 		log.Fatal(err)
 	}
-	return Response(200, buf.String()), nil
+	return Response(http.StatusOK, buf.String()), nil
 }
 
 // GetHomeworkPageStudent - Get homework page
@@ -60,8 +60,8 @@ func (s *StudentPagesApiService) GetHomeworkPageStudent(ctx context.Context, hom
 	// TODO - update GetHomeworkPageStudent with the required logic for this service method.
 	// Add api_student_pages_service.go to the .openapi-generator-ignore to avoid overwriting this service implementation when updating open api generation.
 
-	//TODO: Uncomment the next line to return response Response(200, {}) or use other options such as http.Ok ...
-	//return Response(200, nil),nil
+	//TODO: Uncomment the next line to return response Response(http.StatusOK, {}) or use other options such as http.Ok ...
+	//return Response(http.StatusOK, nil),nil
 
 	//TODO: Uncomment the next line to return response Response(400, {}) or use other options such as http.Ok ...
 	//return Response(400, nil),nil
@@ -77,8 +77,8 @@ func (s *StudentPagesApiService) GetHomeworksPageStudent(ctx context.Context, pa
 	// TODO - update GetHomeworksPageStudent with the required logic for this service method.
 	// Add api_student_pages_service.go to the .openapi-generator-ignore to avoid overwriting this service implementation when updating open api generation.
 
-	//TODO: Uncomment the next line to return response Response(200, {}) or use other options such as http.Ok ...
-	//return Response(200, nil),nil
+	//TODO: Uncomment the next line to return response Response(http.StatusOK, {}) or use other options such as http.Ok ...
+	//return Response(http.StatusOK, nil),nil
 
 	//TODO: Uncomment the next line to return response Response(400, {}) or use other options such as http.Ok ...
 	//return Response(400, nil),nil
@@ -94,8 +94,8 @@ func (s *StudentPagesApiService) GetSubmissionPageStudent(ctx context.Context, s
 	// TODO - update GetSubmissionPageStudent with the required logic for this service method.
 	// Add api_student_pages_service.go to the .openapi-generator-ignore to avoid overwriting this service implementation when updating open api generation.
 
-	//TODO: Uncomment the next line to return response Response(200, {}) or use other options such as http.Ok ...
-	//return Response(200, nil),nil
+	//TODO: Uncomment the next line to return response Response(http.StatusOK, {}) or use other options such as http.Ok ...
+	//return Response(http.StatusOK, nil),nil
 
 	//TODO: Uncomment the next line to return response Response(400, {}) or use other options such as http.Ok ...
 	//return Response(400, nil),nil

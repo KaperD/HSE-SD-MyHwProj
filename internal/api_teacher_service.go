@@ -63,7 +63,7 @@ func (s *TeacherApiService) GetHomeworksTeacher(_ context.Context, offset int32,
 		return Response[[]Homework](http.StatusBadRequest, nil), errors.New("offset and limit must be non negative")
 	}
 	homeworks := s.HomeworkDao.GetHomeworks(offset, limit, false)
-	return Response(200, homeworks), nil
+	return Response(http.StatusOK, homeworks), nil
 }
 
 // GetSubmissionTeacher - Get submission
