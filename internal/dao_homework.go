@@ -44,9 +44,9 @@ func (p *PostgresHomeworkDao) GetHomeworkById(homeworkId int64) *Homework {
 func (p *PostgresHomeworkDao) GetHomeworks(offset int32, limit int32, isPublished bool) []Homework {
 	var homeworks []Homework
 	if isPublished {
-		p.db.Limit(int(limit)).Offset(int(offset)).Where("publication_datetime <= now()").Find(&homeworks)
+		p.db.Limit(int(limit)).Offset(int(offset)).Where("publication_datetime <= now()").Order("deadline desc, id").Find(&homeworks)
 	} else {
-		p.db.Limit(int(limit)).Offset(int(offset)).Find(&homeworks)
+		p.db.Limit(int(limit)).Offset(int(offset)).Order("deadline desc, id").Find(&homeworks)
 	}
 	return homeworks
 }

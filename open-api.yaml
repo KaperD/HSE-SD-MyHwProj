@@ -59,11 +59,13 @@ paths:
           required: true
           name: offset
           type: integer
+          minimum: 0
           description: The number of items to skip before starting to collect the result set
         - in: query
           required: true
           name: limit
           type: integer
+          minimum: 0
           description: The numbers of items to return
       responses:
         "200":
@@ -117,11 +119,13 @@ paths:
           required: true
           name: offset
           type: integer
+          minimum: 0
           description: The number of items to skip before starting to collect the result set
         - in: query
           required: true
           name: limit
           type: integer
+          minimum: 0
           description: The numbers of items to return
       responses:
         "200":
@@ -176,11 +180,13 @@ paths:
           required: true
           name: offset
           type: integer
+          minimum: 0
           description: The number of items to skip before starting to collect the result set
         - in: query
           required: true
           name: limit
           type: integer
+          minimum: 0
           description: The numbers of items to return
       responses:
         "200":
@@ -266,11 +272,13 @@ paths:
           required: true
           name: offset
           type: integer
+          minimum: 0
           description: The number of items to skip before starting to collect the result set
         - in: query
           required: true
           name: limit
           type: integer
+          minimum: 0
           description: The numbers of items to return
       responses:
         "200":
@@ -544,8 +552,8 @@ definitions:
       publicationDatetime:
         type: "string"
         format: "date-time"
-        example: "2022-05-01T17:32:28+3"
-        description: "Date and time of homework publication to students. If time zone is not specified, +3 is taken"
+        example: "2022-05-01T17:32:28+03:00"
+        description: "Using RFC3339 format. Date and time of homework publication to students. If time zone is not specified, +03:00 is taken"
       check:
         type: "string"
         description: "Command to check submissions"
@@ -557,8 +565,8 @@ definitions:
       deadline:
         type: "string"
         format: "date-time"
-        example: "2022-05-23T23:59:59+3"
-        description: "Deadline for students. If time zone is not specified, +3 is taken"
+        example: "2022-05-23T23:59:59+03:00"
+        description: "Using RFC3339 format. Deadline for students. If time zone is not specified, +03:00 is taken"
   Homework:
     type: "object"
     required:
@@ -579,8 +587,8 @@ definitions:
       publicationDatetime:
         type: "string"
         format: "date-time"
-        example: "2022-05-01T17:32:28+3"
-        description: "Date and time of homework publication to students. If time zone is not specified, +3 is taken"
+        example: "2022-05-01T17:32:28+03:00"
+        description: "Using RFC3339 format. Date and time of homework publication to students. If time zone is not specified, +03:00 is taken"
       check:
         type: "string"
         description: "Command to check submissions"
@@ -592,7 +600,8 @@ definitions:
       deadline:
         type: "string"
         format: "date-time"
-        example: "2022-05-23T23:59:59+3"
+        example: "2022-05-23T23:59:59+03:00"
+        description: "Using RFC3339 format. Deadline for students. If time zone is not specified, +03:00 is take"
   NewSubmission:
     type: "object"
     required:
@@ -621,8 +630,8 @@ definitions:
       datetime:
         type: "string"
         format: "date-time"
-        example: "2022-05-23T23:59:59+3"
-        description: "Date and time of making this submission. If time zone is not specified, +3 is taken"
+        example: "2022-05-23T23:59:59+03:00"
+        description: "Using RFC3339 format. Date and time of making this submission. If time zone is not specified, +03:00 is taken"
       solution:
         type: "string"
         description: "Link to the solution"

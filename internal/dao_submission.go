@@ -8,7 +8,7 @@ import (
 type SubmissionDao interface {
 	AddSubmission(homeworkId int64, newSubmission NewSubmission) Submission
 	GetHomeworkSubmissions(homeworkId int64, offset int32, limit int32) []Submission
-	GetSubmission(submissionId int64) *Submission
+	GetSubmissionById(submissionId int64) *Submission
 	UpdateSubmission(submission Submission)
 }
 
@@ -36,11 +36,11 @@ func (p *PostgresSubmissionDao) AddSubmission(homeworkId int64, newSubmission Ne
 
 func (p *PostgresSubmissionDao) GetHomeworkSubmissions(homeworkId int64, offset int32, limit int32) []Submission {
 	var submissions []Submission
-	p.db.Limit(int(limit)).Offset(int(offset)).Where("homework_id = ?", homeworkId).Find(&submissions)
+	p.db.Limit(int(limit)).Offset(int(offset)).Where("homework_id = ?", homeworkId).Order("datetime desc, id").Find(&submissions)
 	return submissions
 }
 
-func (p *PostgresSubmissionDao) GetSubmission(submissionId int64) *Submission {
+func (p *PostgresSubmissionDao) GetSubmissionById(submissionId int64) *Submission {
 	var submission Submission
 	result := p.db.First(&submission, submissionId)
 	if result.Error != nil {
