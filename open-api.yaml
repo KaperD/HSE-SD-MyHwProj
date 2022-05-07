@@ -519,6 +519,7 @@ definitions:
     required:
       - "name"
       - "publicationDatetime"
+      - "check"
       - "task"
       - "deadline"
     properties:
@@ -531,6 +532,10 @@ definitions:
         format: "date-time"
         example: "2022-05-01T17:32:28+3"
         description: "Date and time of homework publication to students. If time zone is not specified, +3 is taken"
+      check:
+        type: "string"
+        description: "Command to check submissions"
+        example: "./gradlew test"
       task:
         type: "string"
         description: "Description of the task"
@@ -546,6 +551,7 @@ definitions:
       - "id"
       - "name"
       - "publicationDatetime"
+      - "check"
       - "task"
       - "deadline"
     properties:
@@ -561,6 +567,10 @@ definitions:
         format: "date-time"
         example: "2022-05-01T17:32:28+3"
         description: "Date and time of homework publication to students. If time zone is not specified, +3 is taken"
+      check:
+        type: "string"
+        description: "Command to check submissions"
+        example: "./gradlew test"
       task:
         type: "string"
         description: "Description of the task"
