@@ -115,6 +115,8 @@ OpenAPI спецификация: [open-api.yaml](open-api.yaml)
 #### Создать домашнюю работу
 ![Создать домашнюю работу](images/create_new_homework.png)
 
+### Логическая структура основного сервиса
+![Classes](images/classes.svg)
 
 ### ER диаграмма базы данных
 ![ER](images/er_diagram.svg)
