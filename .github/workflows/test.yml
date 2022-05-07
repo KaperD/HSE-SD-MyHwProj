@@ -1,0 +1,33 @@
+on: [ push, pull_request ]
+name: Test
+jobs:
+  test:
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, macos-latest, windows-latest ]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Setup Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.18.x
+      - name: Checkout the repository
+        uses: actions/checkout@v3
+      - name: Build
+        run: go build .
+      - name: Run tests
+        run: go test -v ./test/... -coverpkg=./... -coverprofile cover.out
+      - name: Create coverage report html
+        if: ${{ always() }}
+        run: go tool cover -html=cover.out -o cover.html
+      - name: Upload a test coverage report
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-report-${{ matrix.os }}
+          path: cover.html
+      - name: Upload a test coverage report to Codecov
+        if: ${{ always() }}
+        uses: codecov/codecov-action@v2
+        with:
+          files: cover.out
