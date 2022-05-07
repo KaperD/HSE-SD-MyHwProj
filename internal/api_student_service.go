@@ -13,7 +13,9 @@ package myhwproj
 import (
 	"context"
 	"errors"
+	"fmt"
 	"net/http"
+	"time"
 )
 
 // StudentApiService is a service that implements the logic for the StudentApiServicer
@@ -30,80 +32,49 @@ func NewStudentApiService(submissionDao SubmissionDao, homeworkDao HomeworkDao) 
 }
 
 // AddSubmissionStudent - Add new submission
-func (s *StudentApiService) AddSubmissionStudent(ctx context.Context, homeworkId int64, newSubmission NewSubmission) (ImplResponse, error) {
-	// TODO - update AddSubmissionStudent with the required logic for this service method.
-	// Add api_student_service.go to the .openapi-generator-ignore to avoid overwriting this service implementation when updating open api generation.
-
-	//TODO: Uncomment the next line to return response Response(200, Submission{}) or use other options such as http.Ok ...
-	//return Response(200, Submission{}), nil
-
-	//TODO: Uncomment the next line to return response Response(400, {}) or use other options such as http.Ok ...
-	//return Response(400, nil),nil
-
-	//TODO: Uncomment the next line to return response Response(404, {}) or use other options such as http.Ok ...
-	//return Response(404, nil),nil
-
-	return Response(http.StatusNotImplemented, nil), errors.New("AddSubmissionStudent method not implemented")
+func (s *StudentApiService) AddSubmissionStudent(_ context.Context, homeworkId int64, newSubmission NewSubmission) (ImplResponse, error) {
+	if homework := s.HomeworkDao.GetHomeworkById(homeworkId); homework == nil || homework.PublicationDatetime.After(time.Now()) {
+		return Response(http.StatusNotFound, nil), errors.New(fmt.Sprintf("homework with id %d not found", homeworkId))
+	}
+	submission := s.SubmissionDao.AddSubmission(homeworkId, newSubmission)
+	return Response(200, submission), nil
 }
 
 // GetHomeworkByIdStudent - Get homework
-func (s *StudentApiService) GetHomeworkByIdStudent(ctx context.Context, homeworkId int64) (ImplResponse, error) {
-	// TODO - update GetHomeworkByIdStudent with the required logic for this service method.
-	// Add api_student_service.go to the .openapi-generator-ignore to avoid overwriting this service implementation when updating open api generation.
-
-	//TODO: Uncomment the next line to return response Response(200, Homework{}) or use other options such as http.Ok ...
-	//return Response(200, Homework{}), nil
-
-	//TODO: Uncomment the next line to return response Response(400, {}) or use other options such as http.Ok ...
-	//return Response(400, nil),nil
-
-	//TODO: Uncomment the next line to return response Response(404, {}) or use other options such as http.Ok ...
-	//return Response(404, nil),nil
-
-	return Response(http.StatusNotImplemented, nil), errors.New("GetHomeworkByIdStudent method not implemented")
+func (s *StudentApiService) GetHomeworkByIdStudent(_ context.Context, homeworkId int64) (ImplResponse, error) {
+	homework := s.HomeworkDao.GetHomeworkById(homeworkId)
+	if homework == nil || homework.PublicationDatetime.After(time.Now()) {
+		return Response(http.StatusNotFound, nil), errors.New(fmt.Sprintf("homework with id %d not found", homeworkId))
+	}
+	return Response(200, homework), nil
 }
 
 // GetHomeworkSubmissionsStudent - Get homework submissions
-func (s *StudentApiService) GetHomeworkSubmissionsStudent(ctx context.Context, homeworkId int64, offset int32, limit int32) (ImplResponse, error) {
-	// TODO - update GetHomeworkSubmissionsStudent with the required logic for this service method.
-	// Add api_student_service.go to the .openapi-generator-ignore to avoid overwriting this service implementation when updating open api generation.
-
-	//TODO: Uncomment the next line to return response Response(200, []Submission{}) or use other options such as http.Ok ...
-	//return Response(200, []Submission{}), nil
-
-	//TODO: Uncomment the next line to return response Response(400, {}) or use other options such as http.Ok ...
-	//return Response(400, nil),nil
-
-	//TODO: Uncomment the next line to return response Response(404, {}) or use other options such as http.Ok ...
-	//return Response(404, nil),nil
-
-	return Response(http.StatusNotImplemented, nil), errors.New("GetHomeworkSubmissionsStudent method not implemented")
+func (s *StudentApiService) GetHomeworkSubmissionsStudent(_ context.Context, homeworkId int64, offset int32, limit int32) (ImplResponse, error) {
+	if offset < 0 || limit < 0 {
+		return Response(http.StatusBadRequest, nil), errors.New("offset and limit must be non negative")
+	}
+	if homework := s.HomeworkDao.GetHomeworkById(homeworkId); homework == nil || homework.PublicationDatetime.After(time.Now()) {
+		return Response(http.StatusNotFound, nil), errors.New(fmt.Sprintf("homework with id %d not found", homeworkId))
+	}
+	submissions := s.SubmissionDao.GetHomeworkSubmissions(homeworkId, offset, limit)
+	return Response(200, submissions), nil
 }
 
 // GetHomeworksStudent - Get homeworks
-func (s *StudentApiService) GetHomeworksStudent(ctx context.Context, offset int32, limit int32) (ImplResponse, error) {
-	// TODO - update GetHomeworksStudent with the required logic for this service method.
-	// Add api_student_service.go to the .openapi-generator-ignore to avoid overwriting this service implementation when updating open api generation.
-
-	//TODO: Uncomment the next line to return response Response(200, []Homework{}) or use other options such as http.Ok ...
-	//return Response(200, []Homework{}), nil
-
-	return Response(http.StatusNotImplemented, nil), errors.New("GetHomeworksStudent method not implemented")
+func (s *StudentApiService) GetHomeworksStudent(_ context.Context, offset int32, limit int32) (ImplResponse, error) {
+	if offset < 0 || limit < 0 {
+		return Response(http.StatusBadRequest, nil), errors.New("offset and limit must be non negative")
+	}
+	homeworks := s.HomeworkDao.GetHomeworks(offset, limit, true)
+	return Response(200, homeworks), nil
 }
 
 // GetSubmissionStudent - Get submission
-func (s *StudentApiService) GetSubmissionStudent(ctx context.Context, submissionId int64) (ImplResponse, error) {
-	// TODO - update GetSubmissionStudent with the required logic for this service method.
-	// Add api_student_service.go to the .openapi-generator-ignore to avoid overwriting this service implementation when updating open api generation.
-
-	//TODO: Uncomment the next line to return response Response(200, Submission{}) or use other options such as http.Ok ...
-	//return Response(200, Submission{}), nil
-
-	//TODO: Uncomment the next line to return response Response(400, {}) or use other options such as http.Ok ...
-	//return Response(400, nil),nil
-
-	//TODO: Uncomment the next line to return response Response(404, {}) or use other options such as http.Ok ...
-	//return Response(404, nil),nil
-
-	return Response(http.StatusNotImplemented, nil), errors.New("GetSubmissionStudent method not implemented")
+func (s *StudentApiService) GetSubmissionStudent(_ context.Context, submissionId int64) (ImplResponse, error) {
+	submission := s.SubmissionDao.GetSubmissionById(submissionId)
+	if submission == nil {
+		return Response(http.StatusNotFound, nil), errors.New(fmt.Sprintf("submission with id %d not found", submissionId))
+	}
+	return Response(http.StatusOK, submission), nil
 }

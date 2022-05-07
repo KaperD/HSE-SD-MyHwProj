@@ -639,7 +639,7 @@ definitions:
       mark:
         type: "integer"
         format: "int32"
-        description: "Mark out of 10. Null, if there were no checks"
+        description: "Mark out of 10"
       comment:
         type: "string"
         description: "Message from checker"

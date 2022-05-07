@@ -7,7 +7,7 @@ import (
 type HomeworkDao interface {
 	AddHomework(newHomework NewHomework) Homework
 	GetHomeworkById(homeworkId int64) *Homework
-	GetHomeworks(offset int32, limit int32, isPublished bool) []Homework
+	GetHomeworks(offset int32, limit int32, onlyPublished bool) []Homework
 }
 
 type PostgresHomeworkDao struct {

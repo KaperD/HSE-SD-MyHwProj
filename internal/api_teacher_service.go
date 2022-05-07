@@ -67,7 +67,7 @@ func (s *TeacherApiService) GetHomeworksTeacher(_ context.Context, offset int32,
 }
 
 // GetSubmissionTeacher - Get submission
-func (s *TeacherApiService) GetSubmissionTeacher(ctx context.Context, submissionId int64) (ImplResponse, error) {
+func (s *TeacherApiService) GetSubmissionTeacher(_ context.Context, submissionId int64) (ImplResponse, error) {
 	submission := s.SubmissionDao.GetSubmissionById(submissionId)
 	if submission == nil {
 		return Response(http.StatusNotFound, nil), errors.New(fmt.Sprintf("submission with id %d not found", submissionId))
