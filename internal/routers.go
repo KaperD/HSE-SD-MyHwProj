@@ -74,6 +74,19 @@ func EncodeJSONResponse(i interface{}, status *int, w http.ResponseWriter) error
 	return json.NewEncoder(w).Encode(i)
 }
 
+// EncodeHTMLResponse writes html to the http response with an optional status code
+func EncodeHTMLResponse(i interface{}, status *int, w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "text/html; charset=UTF-8")
+	if status != nil {
+		w.WriteHeader(*status)
+	} else {
+		w.WriteHeader(http.StatusOK)
+	}
+
+	_, err := w.Write([]byte(i.(string)))
+	return err
+}
+
 // ReadFormFileToTempFile reads file data from a request form and writes it to a temporary file
 func ReadFormFileToTempFile(r *http.Request, key string) (*os.File, error) {
 	_, fileHeader, err := r.FormFile(key)

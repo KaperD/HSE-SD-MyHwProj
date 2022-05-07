@@ -93,7 +93,7 @@ func (c *StudentPagesApiController) CreateSubmissionPageStudent(w http.ResponseW
 		return
 	}
 	// If no error, encode the body and the result code
-	EncodeJSONResponse(result.Body, &result.Code, w)
+	EncodeHTMLResponse(result.Body, &result.Code, w)
 
 }
 
@@ -119,7 +119,7 @@ func (c *StudentPagesApiController) GetHomeworkPageStudent(w http.ResponseWriter
 		return
 	}
 	// If no error, encode the body and the result code
-	EncodeJSONResponse(result.Body, &result.Code, w)
+	EncodeHTMLResponse(result.Body, &result.Code, w)
 
 }
 
@@ -138,7 +138,7 @@ func (c *StudentPagesApiController) GetHomeworksPageStudent(w http.ResponseWrite
 		return
 	}
 	// If no error, encode the body and the result code
-	EncodeJSONResponse(result.Body, &result.Code, w)
+	EncodeHTMLResponse(result.Body, &result.Code, w)
 
 }
 
@@ -158,6 +158,6 @@ func (c *StudentPagesApiController) GetSubmissionPageStudent(w http.ResponseWrit
 		return
 	}
 	// If no error, encode the body and the result code
-	EncodeJSONResponse(result.Body, &result.Code, w)
+	EncodeHTMLResponse(result.Body, &result.Code, w)
 
 }

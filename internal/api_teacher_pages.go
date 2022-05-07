@@ -86,7 +86,7 @@ func (c *TeacherPagesApiController) CreateHomeworkPageTeacher(w http.ResponseWri
 		return
 	}
 	// If no error, encode the body and the result code
-	EncodeJSONResponse(result.Body, &result.Code, w)
+	EncodeHTMLResponse(result.Body, &result.Code, w)
 
 }
 
@@ -112,7 +112,7 @@ func (c *TeacherPagesApiController) GetHomeworkPageTeacher(w http.ResponseWriter
 		return
 	}
 	// If no error, encode the body and the result code
-	EncodeJSONResponse(result.Body, &result.Code, w)
+	EncodeHTMLResponse(result.Body, &result.Code, w)
 
 }
 
@@ -131,7 +131,7 @@ func (c *TeacherPagesApiController) GetHomeworksPageTeacher(w http.ResponseWrite
 		return
 	}
 	// If no error, encode the body and the result code
-	EncodeJSONResponse(result.Body, &result.Code, w)
+	EncodeHTMLResponse(result.Body, &result.Code, w)
 
 }
 
@@ -151,6 +151,6 @@ func (c *TeacherPagesApiController) GetSubmissionPageTeacher(w http.ResponseWrit
 		return
 	}
 	// If no error, encode the body and the result code
-	EncodeJSONResponse(result.Body, &result.Code, w)
+	EncodeHTMLResponse(result.Body, &result.Code, w)
 
 }
