@@ -15,8 +15,7 @@ import (
 )
 
 type Submission struct {
-
-	Id int64 `json:"id"`
+	Id int64 `json:"id" gorm:"primarykey"`
 
 	HomeworkId int64 `json:"homeworkId"`
 
@@ -31,17 +30,20 @@ type Submission struct {
 
 	// Message from checker
 	Comment string `json:"comment"`
+
+	// Used only for making HomeworkId foreign key
+	homework *Homework `gorm:"foreignKey:HomeworkId"`
 }
 
 // AssertSubmissionRequired checks if the required fields are not zero-ed
 func AssertSubmissionRequired(obj Submission) error {
 	elements := map[string]interface{}{
-		"id": obj.Id,
+		"id":         obj.Id,
 		"homeworkId": obj.HomeworkId,
-		"datetime": obj.Datetime,
-		"solution": obj.Solution,
-		"mark": obj.Mark,
-		"comment": obj.Comment,
+		"datetime":   obj.Datetime,
+		"solution":   obj.Solution,
+		"mark":       obj.Mark,
+		"comment":    obj.Comment,
 	}
 	for name, el := range elements {
 		if isZero := IsZeroValue(el); isZero {

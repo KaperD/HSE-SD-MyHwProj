@@ -11,22 +11,68 @@
 package main
 
 import (
+	"fmt"
+	"github.com/spf13/viper"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 	"log"
 	"net/http"
 
 	myhwproj "github.com/GIT_USER_ID/GIT_REPO_ID/internal"
 )
 
+func connectToDB() (db *gorm.DB, err error) {
+	vp := viper.New()
+	vp.SetConfigName("db_config")
+	vp.SetConfigType("json")
+	vp.AddConfigPath(".")
+	if err := vp.ReadInConfig(); err != nil {
+		log.Fatal(err)
+	}
+	host := vp.GetString("host")
+	port := vp.GetString("port")
+	user := vp.GetString("user")
+	password := vp.GetString("password")
+	dbname := vp.GetString("dbname")
+	timeZone := vp.GetString("timeZone")
+
+	dsn := fmt.Sprintf(
+		"host=%s port=%s user=%s password=%s dbname=%s TimeZone=%s sslmode=disable",
+		host,
+		port,
+		user,
+		password,
+		dbname,
+		timeZone,
+	)
+
+	db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	if err != nil {
+		return
+	}
+
+	err = db.AutoMigrate(&myhwproj.Homework{}, &myhwproj.Submission{})
+	return
+}
+
 func main() {
 	log.Printf("Server started")
 
-	StudentApiService := myhwproj.NewStudentApiService()
+	db, err := connectToDB()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	SubmissionDao := myhwproj.NewPostgresSubmissionDao(db)
+	HomeworkDao := myhwproj.NewPostgresHomeworkDao(db)
+
+	StudentApiService := myhwproj.NewStudentApiService(SubmissionDao, HomeworkDao)
 	StudentApiController := myhwproj.NewStudentApiController(StudentApiService)
 
 	StudentPagesApiService := myhwproj.NewStudentPagesApiService(StudentApiService)
 	StudentPagesApiController := myhwproj.NewStudentPagesApiController(StudentPagesApiService)
 
-	TeacherApiService := myhwproj.NewTeacherApiService()
+	TeacherApiService := myhwproj.NewTeacherApiService(SubmissionDao, HomeworkDao)
 	TeacherApiController := myhwproj.NewTeacherApiController(TeacherApiService)
 
 	TeacherPagesApiService := myhwproj.NewTeacherPagesApiService(TeacherApiService)

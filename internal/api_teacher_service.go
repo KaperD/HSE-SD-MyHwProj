@@ -20,11 +20,13 @@ import (
 // This service should implement the business logic for every endpoint for the TeacherApi API.
 // Include any external packages or services that will be required by this service.
 type TeacherApiService struct {
+	SubmissionDao SubmissionDao
+	HomeworkDao   HomeworkDao
 }
 
 // NewTeacherApiService creates a default api service
-func NewTeacherApiService() TeacherApiServicer {
-	return &TeacherApiService{}
+func NewTeacherApiService(submissionDao SubmissionDao, homeworkDao HomeworkDao) TeacherApiServicer {
+	return &TeacherApiService{SubmissionDao: submissionDao, HomeworkDao: homeworkDao}
 }
 
 // AddHomeworkTeacher - Add new homework

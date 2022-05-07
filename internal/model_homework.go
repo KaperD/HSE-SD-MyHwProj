@@ -15,8 +15,7 @@ import (
 )
 
 type Homework struct {
-
-	Id int64 `json:"id"`
+	Id int64 `json:"id" gorm:"primarykey"`
 
 	// Name of a new homework
 	Name string `json:"name"`
@@ -36,12 +35,12 @@ type Homework struct {
 // AssertHomeworkRequired checks if the required fields are not zero-ed
 func AssertHomeworkRequired(obj Homework) error {
 	elements := map[string]interface{}{
-		"id": obj.Id,
-		"name": obj.Name,
+		"id":                  obj.Id,
+		"name":                obj.Name,
 		"publicationDatetime": obj.PublicationDatetime,
-		"check": obj.Check,
-		"task": obj.Task,
-		"deadline": obj.Deadline,
+		"check":               obj.Check,
+		"task":                obj.Task,
+		"deadline":            obj.Deadline,
 	}
 	for name, el := range elements {
 		if isZero := IsZeroValue(el); isZero {
