@@ -20,11 +20,12 @@ import (
 // This service should implement the business logic for every endpoint for the StudentPagesApi API.
 // Include any external packages or services that will be required by this service.
 type StudentPagesApiService struct {
+	StudentApiService StudentApiServicer
 }
 
 // NewStudentPagesApiService creates a default api service
-func NewStudentPagesApiService() StudentPagesApiServicer {
-	return &StudentPagesApiService{}
+func NewStudentPagesApiService(studentApiService StudentApiServicer) StudentPagesApiServicer {
+	return &StudentPagesApiService{StudentApiService: studentApiService}
 }
 
 // CreateSubmissionPageStudent - Get creating submission page

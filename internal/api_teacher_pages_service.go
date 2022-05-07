@@ -20,11 +20,12 @@ import (
 // This service should implement the business logic for every endpoint for the TeacherPagesApi API.
 // Include any external packages or services that will be required by this service.
 type TeacherPagesApiService struct {
+	TeacherApiService TeacherApiServicer
 }
 
 // NewTeacherPagesApiService creates a default api service
-func NewTeacherPagesApiService() TeacherPagesApiServicer {
-	return &TeacherPagesApiService{}
+func NewTeacherPagesApiService(teacherApiService TeacherApiServicer) TeacherPagesApiServicer {
+	return &TeacherPagesApiService{TeacherApiService: teacherApiService}
 }
 
 // CreateHomeworkPageTeacher - Get creating homework page

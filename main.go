@@ -23,13 +23,13 @@ func main() {
 	StudentApiService := myhwproj.NewStudentApiService()
 	StudentApiController := myhwproj.NewStudentApiController(StudentApiService)
 
-	StudentPagesApiService := myhwproj.NewStudentPagesApiService()
+	StudentPagesApiService := myhwproj.NewStudentPagesApiService(StudentApiService)
 	StudentPagesApiController := myhwproj.NewStudentPagesApiController(StudentPagesApiService)
 
 	TeacherApiService := myhwproj.NewTeacherApiService()
 	TeacherApiController := myhwproj.NewTeacherApiController(TeacherApiService)
 
-	TeacherPagesApiService := myhwproj.NewTeacherPagesApiService()
+	TeacherPagesApiService := myhwproj.NewTeacherPagesApiService(TeacherApiService)
 	TeacherPagesApiController := myhwproj.NewTeacherPagesApiController(TeacherPagesApiService)
 
 	router := myhwproj.NewRouter(StudentApiController, StudentPagesApiController, TeacherApiController, TeacherPagesApiController)
