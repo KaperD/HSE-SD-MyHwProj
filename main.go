@@ -18,7 +18,7 @@ import (
 	"log"
 	"net/http"
 
-	myhwproj "github.com/GIT_USER_ID/GIT_REPO_ID/internal"
+	myhwproj "github.com/KaperD/HSE-SD-MyHwProj/internal"
 )
 
 func connectToDB() (db *gorm.DB, err error) {
