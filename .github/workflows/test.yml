@@ -16,6 +16,17 @@ jobs:
       - name: Build
         run: go build .
       - name: Run tests
+        run: go test -v ./test/...
+  test-coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.18.x
+      - name: Checkout the repository
+        uses: actions/checkout@v3
+      - name: Run tests
         run: go test -v ./test/... -coverpkg=./... -coverprofile cover.out
       - name: Create coverage report html
         if: ${{ always() }}
@@ -27,7 +38,7 @@ jobs:
           name: test-report-${{ matrix.os }}
           path: cover.html
       - name: Upload a test coverage report to Codecov
-        if: ${{ matrix.os == 'ubuntu-latest' }}
+        if: ${{ always() }}
         uses: codecov/codecov-action@v2
         with:
           files: cover.out
