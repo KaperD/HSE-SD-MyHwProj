@@ -23,7 +23,8 @@
                             <div class="row">
                                 <div class="col-auto ">
                                     <button class="btn rounded-pill bg-primary">
-                                        <a class="nav-link active text-white" aria-current="page" href="/student/homeworks">Home</a>
+                                        <a class="nav-link active text-white" aria-current="page"
+                                           href="/student/homeworks">Home</a>
                                     </button>
                                 </div>
                                 <div class="col-auto">
@@ -65,7 +66,8 @@
             <h1 class="display-3">Submissions</h1>
         </div>
         <div class="col-6 text-end pt-md-3 pt-2">
-            <div type="button" class="btn btn-outline-dark rounded-pill" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            <div type="button" class="btn btn-outline-dark rounded-pill" data-bs-toggle="modal"
+                 data-bs-target="#exampleModal">
                 <div class="display-6">Create</div>
             </div>
         </div>
@@ -97,12 +99,14 @@
         </div>
     {{end}}
 </div>
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content rounded-3">
             <div class="modal-header">
                 <h4 class="modal-title " id="exampleModalLabel">New submission</h4>
-                <button type="button" class="btn btn-outline-dark rounded-pill close" data-bs-dismiss="modal" aria-label="Close">
+                <button type="button" class="btn btn-outline-dark rounded-pill close" data-bs-dismiss="modal"
+                        aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -110,12 +114,14 @@
                 <form>
                     <div class="form-group">
                         <label for="solution" class="col-form-label">Link to a solution:</label>
-                        <input type="url" class="form-control rounded-3 border border-dark" id="solution" placeholder="https://github.com/">
+                        <input type="url" class="form-control rounded-3 border border-dark" id="solution"
+                               placeholder="https://github.com/">
                     </div>
                 </form>
             </div>
             <div id="modalFooter" class="modal-footer">
-                <button type="button" class="btn btn-outline-secondary rounded-pill" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-outline-secondary rounded-pill" data-bs-dismiss="modal">Close
+                </button>
                 <button id="newSubmission" type="button" class="btn btn-outline-dark rounded-pill">Submit</button>
             </div>
         </div>
