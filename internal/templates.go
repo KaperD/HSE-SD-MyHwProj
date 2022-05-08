@@ -8,7 +8,7 @@ import (
 func NewTemplateCache(dir string) (map[string]*template.Template, error) {
 	cache := map[string]*template.Template{}
 
-	pages, err := filepath.Glob(filepath.Join(dir, "*.page.tmpl"))
+	pages, err := filepath.Glob(filepath.Join(dir, "*.gohtml"))
 	if err != nil {
 		return nil, err
 	}
@@ -21,7 +21,7 @@ func NewTemplateCache(dir string) (map[string]*template.Template, error) {
 			return nil, err
 		}
 
-		ts, err = ts.ParseGlob(filepath.Join(dir, "*.layout.tmpl"))
+		ts, err = ts.ParseGlob(filepath.Join(dir, "*.gohtml"))
 		if err != nil {
 			return nil, err
 		}

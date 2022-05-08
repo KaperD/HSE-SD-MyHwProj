@@ -43,7 +43,7 @@ func (s *StudentPagesApiService) CreateSubmissionPageStudent(ctx context.Context
 		return Response(homeworkResult.Code, ""), err
 	}
 	homework := homeworkResult.Body
-	return s.renderPage("student.create.submission.page.tmpl", map[string]any{"Homework": homework})
+	return s.renderPage("student.create.submission.gohtml", map[string]any{"Homework": homework})
 }
 
 // GetHomeworkPageStudent - Get homework page
@@ -59,7 +59,7 @@ func (s *StudentPagesApiService) GetHomeworkPageStudent(ctx context.Context, hom
 	homework := homeworkResult.Body
 	submissions := submissionsResult.Body
 
-	return s.renderPage("student.homework.page.tmpl", map[string]any{"Homework": homework, "Submissions": submissions})
+	return s.renderPage("student.homework.gohtml", map[string]any{"Homework": homework, "Submissions": submissions})
 }
 
 // GetHomeworksPageStudent - Get homeworks page
@@ -70,7 +70,7 @@ func (s *StudentPagesApiService) GetHomeworksPageStudent(ctx context.Context, pa
 	}
 	homeworks := homeworksResult.Body
 
-	return s.renderPage("student.homeworks.page.tmpl", map[string]any{"Homeworks": homeworks})
+	return s.renderPage("student.homeworks.gohtml", map[string]any{"Homeworks": homeworks})
 }
 
 // GetSubmissionPageStudent - Get submission page
@@ -87,7 +87,7 @@ func (s *StudentPagesApiService) GetSubmissionPageStudent(ctx context.Context, s
 	}
 	homework := homeworkResult.Body
 
-	return s.renderPage("student.submission.page.tmpl", map[string]any{"Submission": submission, "Homework": homework})
+	return s.renderPage("student.submission.gohtml", map[string]any{"Submission": submission, "Homework": homework})
 }
 
 func (s *StudentPagesApiService) renderPage(templateName string, data any) (ImplResponse[string], error) {
