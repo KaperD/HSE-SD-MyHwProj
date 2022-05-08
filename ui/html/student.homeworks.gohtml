@@ -41,6 +41,9 @@
         <hr/>
     </div>
     <div class="container text-center pt-3">
+        {{if not .Homeworks}}
+            <p class="lead m-2">No homework yet</p>
+        {{end}}
         {{range .Homeworks}}
             <div class="row m-2">
                 <a href="/student/homeworks/{{.Id}}" type="button"
