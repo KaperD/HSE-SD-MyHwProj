@@ -11,8 +11,12 @@
 package myhwproj
 
 import (
+	"bytes"
 	"context"
 	"errors"
+	"html/template"
+	"log"
+	"math"
 	"net/http"
 )
 
@@ -21,71 +25,78 @@ import (
 // Include any external packages or services that will be required by this service.
 type TeacherPagesApiService struct {
 	TeacherApiService TeacherApiServicer
+	TemplateCache     map[string]*template.Template
 }
 
 // NewTeacherPagesApiService creates a default api service
-func NewTeacherPagesApiService(teacherApiService TeacherApiServicer) TeacherPagesApiServicer {
-	return &TeacherPagesApiService{TeacherApiService: teacherApiService}
+func NewTeacherPagesApiService(
+	teacherApiService TeacherApiServicer,
+	templateCache map[string]*template.Template,
+) TeacherPagesApiServicer {
+	return &TeacherPagesApiService{TeacherApiService: teacherApiService, TemplateCache: templateCache}
 }
 
 // CreateHomeworkPageTeacher - Get creating homework page
-func (s *TeacherPagesApiService) CreateHomeworkPageTeacher(ctx context.Context) (ImplResponse[string], error) {
-	// TODO - update CreateHomeworkPageTeacher with the required logic for this service method.
-	// Add api_teacher_pages_service.go to the .openapi-generator-ignore to avoid overwriting this service implementation when updating open api generation.
-
-	//TODO: Uncomment the next line to return response Response(200, {}) or use other options such as http.Ok ...
-	//return Response(200, nil),nil
-
-	return Response(http.StatusNotImplemented, ""), errors.New("CreateHomeworkPageTeacher method not implemented")
+func (s *TeacherPagesApiService) CreateHomeworkPageTeacher(_ context.Context) (ImplResponse[string], error) {
+	return s.renderPage("teacher.create.homework.page.tmpl", nil)
 }
 
 // GetHomeworkPageTeacher - Get homework page
 func (s *TeacherPagesApiService) GetHomeworkPageTeacher(ctx context.Context, homeworkId int64, page int32) (ImplResponse[string], error) {
-	// TODO - update GetHomeworkPageTeacher with the required logic for this service method.
-	// Add api_teacher_pages_service.go to the .openapi-generator-ignore to avoid overwriting this service implementation when updating open api generation.
+	homeworkResult, err := s.TeacherApiService.GetHomeworkByIdTeacher(ctx, homeworkId)
+	if err != nil {
+		return Response(homeworkResult.Code, ""), err
+	}
+	submissionsResult, err := s.TeacherApiService.GetHomeworkSubmissionsTeacher(ctx, homeworkId, 0, math.MaxInt32)
+	if err != nil {
+		return Response(submissionsResult.Code, ""), err
+	}
+	homework := homeworkResult.Body
+	submissions := submissionsResult.Body
 
-	//TODO: Uncomment the next line to return response Response(200, {}) or use other options such as http.Ok ...
-	//return Response(200, nil),nil
-
-	//TODO: Uncomment the next line to return response Response(400, {}) or use other options such as http.Ok ...
-	//return Response(400, nil),nil
-
-	//TODO: Uncomment the next line to return response Response(404, {}) or use other options such as http.Ok ...
-	//return Response(404, nil),nil
-
-	return Response(http.StatusNotImplemented, ""), errors.New("GetHomeworkPageTeacher method not implemented")
+	return s.renderPage("teacher.homework.page.tmpl", map[string]any{"Homework": homework, "Submissions": submissions})
 }
 
 // GetHomeworksPageTeacher - Get homeworks page
 func (s *TeacherPagesApiService) GetHomeworksPageTeacher(ctx context.Context, page int32) (ImplResponse[string], error) {
-	// TODO - update GetHomeworksPageTeacher with the required logic for this service method.
-	// Add api_teacher_pages_service.go to the .openapi-generator-ignore to avoid overwriting this service implementation when updating open api generation.
+	homeworksResult, err := s.TeacherApiService.GetHomeworksTeacher(ctx, 0, math.MaxInt32)
+	if err != nil {
+		return Response(homeworksResult.Code, ""), err
+	}
+	homeworks := homeworksResult.Body
 
-	//TODO: Uncomment the next line to return response Response(200, {}) or use other options such as http.Ok ...
-	//return Response(200, nil),nil
-
-	//TODO: Uncomment the next line to return response Response(400, {}) or use other options such as http.Ok ...
-	//return Response(400, nil),nil
-
-	//TODO: Uncomment the next line to return response Response(404, {}) or use other options such as http.Ok ...
-	//return Response(404, nil),nil
-
-	return Response(http.StatusNotImplemented, ""), errors.New("GetHomeworksPageTeacher method not implemented")
+	return s.renderPage("teacher.homeworks.page.tmpl", map[string]any{"Homeworks": homeworks})
 }
 
 // GetSubmissionPageTeacher - Get submission page
 func (s *TeacherPagesApiService) GetSubmissionPageTeacher(ctx context.Context, submissionId int64) (ImplResponse[string], error) {
-	// TODO - update GetSubmissionPageTeacher with the required logic for this service method.
-	// Add api_teacher_pages_service.go to the .openapi-generator-ignore to avoid overwriting this service implementation when updating open api generation.
+	submissionResult, err := s.TeacherApiService.GetSubmissionTeacher(ctx, submissionId)
+	if err != nil {
+		return Response(submissionResult.Code, ""), err
+	}
+	submission := submissionResult.Body
 
-	//TODO: Uncomment the next line to return response Response(200, {}) or use other options such as http.Ok ...
-	//return Response(200, nil),nil
+	homeworkResult, err := s.TeacherApiService.GetHomeworkByIdTeacher(ctx, submission.HomeworkId)
+	if err != nil {
+		return Response(homeworkResult.Code, ""), err
+	}
+	homework := homeworkResult.Body
 
-	//TODO: Uncomment the next line to return response Response(400, {}) or use other options such as http.Ok ...
-	//return Response(400, nil),nil
+	return s.renderPage("teacher.submission.page.tmpl", map[string]any{"Submission": submission, "Homework": homework})
+}
 
-	//TODO: Uncomment the next line to return response Response(404, {}) or use other options such as http.Ok ...
-	//return Response(404, nil),nil
+func (s *TeacherPagesApiService) renderPage(templateName string, data any) (ImplResponse[string], error) {
+	ts, ok := s.TemplateCache[templateName]
+	if !ok {
+		log.Printf("Can't find html template %s\n", templateName)
+		return Response(http.StatusInternalServerError, ""), errors.New("can't find html template")
+	}
 
-	return Response(http.StatusNotImplemented, ""), errors.New("GetSubmissionPageTeacher method not implemented")
+	buf := new(bytes.Buffer)
+	err := ts.Execute(buf, data)
+	if err != nil {
+		log.Printf("Can't execute html template %s: %s\n", templateName, err.Error())
+		return Response(http.StatusInternalServerError, ""), errors.New("can't execute html template")
+	}
+	return Response(http.StatusOK, buf.String()), nil
 }

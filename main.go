@@ -17,6 +17,7 @@ import (
 	"gorm.io/gorm"
 	"log"
 	"net/http"
+	"os"
 
 	myhwproj "github.com/KaperD/HSE-SD-MyHwProj/internal"
 )
@@ -37,11 +38,11 @@ func connectToDB() (db *gorm.DB, err error) {
 	timeZone := vp.GetString("timeZone")
 
 	dsn := fmt.Sprintf(
-		"host=%s port=%s user=%s password=%s dbname=%s TimeZone=%s sslmode=disable",
-		host,
-		port,
+		"postgres://%s:%s@%s:%s/%s?TimeZone=%s",
 		user,
 		password,
+		host,
+		port,
 		dbname,
 		timeZone,
 	)
@@ -63,22 +64,31 @@ func main() {
 		log.Fatal(err)
 	}
 
+	TemplateCache, err := myhwproj.NewTemplateCache("./ui/html")
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	SubmissionDao := myhwproj.NewPostgresSubmissionDao(db)
 	HomeworkDao := myhwproj.NewPostgresHomeworkDao(db)
 
 	StudentApiService := myhwproj.NewStudentApiService(SubmissionDao, HomeworkDao)
 	StudentApiController := myhwproj.NewStudentApiController(StudentApiService)
 
-	StudentPagesApiService := myhwproj.NewStudentPagesApiService(StudentApiService)
+	StudentPagesApiService := myhwproj.NewStudentPagesApiService(StudentApiService, TemplateCache)
 	StudentPagesApiController := myhwproj.NewStudentPagesApiController(StudentPagesApiService)
 
 	TeacherApiService := myhwproj.NewTeacherApiService(SubmissionDao, HomeworkDao)
 	TeacherApiController := myhwproj.NewTeacherApiController(TeacherApiService)
 
-	TeacherPagesApiService := myhwproj.NewTeacherPagesApiService(TeacherApiService)
+	TeacherPagesApiService := myhwproj.NewTeacherPagesApiService(TeacherApiService, TemplateCache)
 	TeacherPagesApiController := myhwproj.NewTeacherPagesApiController(TeacherPagesApiService)
 
 	router := myhwproj.NewRouter(StudentApiController, StudentPagesApiController, TeacherApiController, TeacherPagesApiController)
 
-	log.Fatal(http.ListenAndServe(":8080", router))
+	port, ok := os.LookupEnv("PORT")
+	if !ok {
+		port = "8080"
+	}
+	log.Fatal(http.ListenAndServe(":"+port, router))
 }

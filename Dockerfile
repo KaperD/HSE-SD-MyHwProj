@@ -3,6 +3,7 @@ WORKDIR /go/src
 COPY internal ./internal
 COPY go.mod .
 COPY go.sum .
+COPY db_config.json .
 COPY main.go .
 
 ENV CGO_ENABLED=0
@@ -12,5 +13,6 @@ RUN go build -a -installsuffix cgo -o myhwproj .
 
 FROM scratch AS runtime
 COPY --from=build /go/src/myhwproj ./
+COPY --from=build /go/src/db_config.json ./
 EXPOSE 8080/tcp
 ENTRYPOINT ["./myhwproj"]
