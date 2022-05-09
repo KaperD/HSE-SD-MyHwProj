@@ -102,7 +102,11 @@
                     <h1 class="h4">Link to the solution</h1>
                 </div>
                 <div class="col-lg-9">
-                    <p class="lead text-center">{{.Submission.Solution}}</p>
+                    {{if isLink .Submission.Solution}}
+                        <a href="{{.Submission.Solution}}"><p class="lead text-center">{{.Submission.Solution}}</p></a>
+                    {{else}}
+                        <p class="lead text-center">{{.Submission.Solution}}</p>
+                    {{end}}
                 </div>
             </div>
             <hr class="mt-0"/>

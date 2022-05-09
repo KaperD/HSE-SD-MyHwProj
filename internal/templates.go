@@ -2,6 +2,7 @@ package myhwproj
 
 import (
 	"html/template"
+	"net/url"
 	"path/filepath"
 )
 
@@ -16,7 +17,16 @@ func NewTemplateCache(dir string) (map[string]*template.Template, error) {
 	for _, page := range pages {
 		name := filepath.Base(page)
 
-		ts, err := template.ParseFiles(page)
+		ts := template.New(name)
+
+		ts.Funcs(template.FuncMap{
+			"isLink": func(s string) bool {
+				_, err := url.ParseRequestURI(s)
+				return err == nil
+			},
+		})
+
+		ts, err := ts.ParseFiles(page)
 		if err != nil {
 			return nil, err
 		}
@@ -25,11 +35,6 @@ func NewTemplateCache(dir string) (map[string]*template.Template, error) {
 		if err != nil {
 			return nil, err
 		}
-
-		//ts, err = ts.ParseGlob(filepath.Join(dir, "*.partial.tmpl"))
-		//if err != nil {
-		//	return nil, err
-		//}
 
 		cache[name] = ts
 	}
