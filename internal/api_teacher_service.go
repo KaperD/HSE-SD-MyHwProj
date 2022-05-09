@@ -15,6 +15,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"strings"
 )
 
 // TeacherApiService is a service that implements the logic for the TeacherApiServicer
@@ -32,6 +33,15 @@ func NewTeacherApiService(submissionDao SubmissionDao, homeworkDao HomeworkDao) 
 
 // AddHomeworkTeacher - Add new homework
 func (s *TeacherApiService) AddHomeworkTeacher(_ context.Context, newHomework NewHomework) (ImplResponse[Homework], error) {
+	if len(strings.TrimSpace(newHomework.Name)) == 0 {
+		return Response(http.StatusBadRequest, Homework{}), errors.New("name must not be blank")
+	}
+	if len(strings.TrimSpace(newHomework.Check)) == 0 {
+		return Response(http.StatusBadRequest, Homework{}), errors.New("check must not be blank")
+	}
+	if len(strings.TrimSpace(newHomework.Task)) == 0 {
+		return Response(http.StatusBadRequest, Homework{}), errors.New("task must not be blank")
+	}
 	if !newHomework.Deadline.After(newHomework.PublicationDatetime) {
 		return Response(http.StatusBadRequest, Homework{}), errors.New("deadline must be after publication")
 	}

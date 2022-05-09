@@ -15,6 +15,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -33,6 +34,9 @@ func NewStudentApiService(submissionDao SubmissionDao, homeworkDao HomeworkDao) 
 
 // AddSubmissionStudent - Add new submission
 func (s *StudentApiService) AddSubmissionStudent(_ context.Context, homeworkId int64, newSubmission NewSubmission) (ImplResponse[Submission], error) {
+	if len(strings.TrimSpace(newSubmission.Solution)) == 0 {
+		return Response(http.StatusBadRequest, Submission{}), errors.New("solution must not be blank")
+	}
 	if homework := s.HomeworkDao.GetHomeworkById(homeworkId); homework == nil || homework.PublicationDatetime.After(time.Now()) {
 		return Response(http.StatusNotFound, Submission{}), errors.New(fmt.Sprintf("homework with id %d not found", homeworkId))
 	}
