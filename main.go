@@ -18,6 +18,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	myhwproj "github.com/KaperD/HSE-SD-MyHwProj/internal"
 )
@@ -58,6 +59,12 @@ func connectToDB() (db *gorm.DB, err error) {
 
 func main() {
 	log.Printf("Server started")
+
+	timezone, err := time.LoadLocation("Europe/Moscow")
+	if err != nil {
+		log.Fatal(err)
+	}
+	time.Local = timezone
 
 	db, err := connectToDB()
 	if err != nil {

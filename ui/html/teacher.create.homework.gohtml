@@ -129,7 +129,7 @@
         if (datetime === "") {
             return "";
         }
-        return (new Date(datetime)).toISOString();
+        return (new Date(datetime + "+03:00")).toISOString();
     }
 
     function successCreation(data) {
