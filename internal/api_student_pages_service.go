@@ -36,16 +36,6 @@ func NewStudentPagesApiService(
 	return &StudentPagesApiService{StudentApiService: studentApiService, TemplateCache: templateCache}
 }
 
-// CreateSubmissionPageStudent - Get creating submission page
-func (s *StudentPagesApiService) CreateSubmissionPageStudent(ctx context.Context, homeworkId int64) (ImplResponse[string], error) {
-	homeworkResult, err := s.StudentApiService.GetHomeworkByIdStudent(ctx, homeworkId)
-	if err != nil {
-		return Response(homeworkResult.Code, ""), err
-	}
-	homework := homeworkResult.Body
-	return s.renderPage("student.create.submission.gohtml", map[string]any{"Homework": homework})
-}
-
 // GetHomeworkPageStudent - Get homework page
 func (s *StudentPagesApiService) GetHomeworkPageStudent(ctx context.Context, homeworkId int64, page int32) (ImplResponse[string], error) {
 	homeworkResult, err := s.StudentApiService.GetHomeworkByIdStudent(ctx, homeworkId)

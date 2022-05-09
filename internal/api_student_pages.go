@@ -44,12 +44,6 @@ func NewStudentPagesApiController(s StudentPagesApiServicer, opts ...StudentPage
 func (c *StudentPagesApiController) Routes() Routes {
 	return Routes{
 		{
-			"CreateSubmissionPageStudent",
-			strings.ToUpper("Get"),
-			"/student/homeworks/{homeworkId}/submissions/create",
-			c.CreateSubmissionPageStudent,
-		},
-		{
 			"GetHomeworkPageStudent",
 			strings.ToUpper("Get"),
 			"/student/homeworks/{homeworkId}",
@@ -68,26 +62,6 @@ func (c *StudentPagesApiController) Routes() Routes {
 			c.GetSubmissionPageStudent,
 		},
 	}
-}
-
-// CreateSubmissionPageStudent - Get creating submission page
-func (c *StudentPagesApiController) CreateSubmissionPageStudent(w http.ResponseWriter, r *http.Request) {
-	params := mux.Vars(r)
-	homeworkIdParam, err := parseInt64Parameter(params["homeworkId"], true)
-	if err != nil {
-		c.errorHandler(w, r, &ParsingError{Err: err}, 0)
-		return
-	}
-
-	result, err := c.service.CreateSubmissionPageStudent(r.Context(), homeworkIdParam)
-	// If an error occurred, encode the error with the status code
-	if err != nil {
-		c.errorHandler(w, r, err, result.Code)
-		return
-	}
-	// If no error, encode the body and the result code
-	EncodeHTMLResponse(result.Body, &result.Code, w)
-
 }
 
 // GetHomeworkPageStudent - Get homework page

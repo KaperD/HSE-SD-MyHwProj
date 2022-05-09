@@ -74,7 +74,6 @@ type StudentApiServicer interface {
 // while the service implementation can ignored with the .openapi-generator-ignore file
 // and updated with the logic required for the API.
 type StudentPagesApiServicer interface {
-	CreateSubmissionPageStudent(context.Context, int64) (ImplResponse[string], error)
 	GetHomeworkPageStudent(context.Context, int64, int32) (ImplResponse[string], error)
 	GetHomeworksPageStudent(context.Context, int32) (ImplResponse[string], error)
 	GetSubmissionPageStudent(context.Context, int64) (ImplResponse[string], error)
