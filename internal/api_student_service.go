@@ -23,13 +23,22 @@ import (
 // This service should implement the business logic for every endpoint for the StudentApi API.
 // Include any external packages or services that will be required by this service.
 type StudentApiService struct {
-	SubmissionDao SubmissionDao
-	HomeworkDao   HomeworkDao
+	SubmissionDao  SubmissionDao
+	HomeworkDao    HomeworkDao
+	WorkersService WorkersService
 }
 
 // NewStudentApiService creates a default api service
-func NewStudentApiService(submissionDao SubmissionDao, homeworkDao HomeworkDao) StudentApiServicer {
-	return &StudentApiService{SubmissionDao: submissionDao, HomeworkDao: homeworkDao}
+func NewStudentApiService(
+	submissionDao SubmissionDao,
+	homeworkDao HomeworkDao,
+	workersService WorkersService,
+) StudentApiServicer {
+	result := StudentApiService{SubmissionDao: submissionDao, HomeworkDao: homeworkDao, WorkersService: workersService}
+	result.WorkersService.SetHandler(func(submission Submission) {
+		result.SubmissionDao.UpdateSubmission(submission)
+	})
+	return &result
 }
 
 // AddSubmissionStudent - Add new submission
@@ -41,6 +50,7 @@ func (s *StudentApiService) AddSubmissionStudent(_ context.Context, homeworkId i
 		return Response(http.StatusNotFound, Submission{}), errors.New(fmt.Sprintf("homework with id %d not found", homeworkId))
 	}
 	submission := s.SubmissionDao.AddSubmission(homeworkId, newSubmission)
+	s.WorkersService.CheckSubmission(submission)
 	return Response(http.StatusOK, submission), nil
 }
 

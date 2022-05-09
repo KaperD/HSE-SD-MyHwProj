@@ -78,8 +78,9 @@ func main() {
 
 	SubmissionDao := myhwproj.NewPostgresSubmissionDao(db)
 	HomeworkDao := myhwproj.NewPostgresHomeworkDao(db)
+	WorkersService := myhwproj.NewRabbitMQWorkersService()
 
-	StudentApiService := myhwproj.NewStudentApiService(SubmissionDao, HomeworkDao)
+	StudentApiService := myhwproj.NewStudentApiService(SubmissionDao, HomeworkDao, WorkersService)
 	StudentApiController := myhwproj.NewStudentApiController(StudentApiService)
 
 	StudentPagesApiService := myhwproj.NewStudentPagesApiService(StudentApiService, TemplateCache)
