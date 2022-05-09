@@ -32,6 +32,9 @@ func NewTeacherApiService(submissionDao SubmissionDao, homeworkDao HomeworkDao) 
 
 // AddHomeworkTeacher - Add new homework
 func (s *TeacherApiService) AddHomeworkTeacher(_ context.Context, newHomework NewHomework) (ImplResponse[Homework], error) {
+	if !newHomework.Deadline.After(newHomework.PublicationDatetime) {
+		return Response(http.StatusBadRequest, Homework{}), errors.New("deadline must be after publication")
+	}
 	homework := s.HomeworkDao.AddHomework(newHomework)
 	return Response(http.StatusOK, homework), nil
 }
