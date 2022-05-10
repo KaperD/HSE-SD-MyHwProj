@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 )
 
+// NewTemplateCache creates cache of html templates
 func NewTemplateCache(dir string) (map[string]*template.Template, error) {
 	cache := map[string]*template.Template{}
 

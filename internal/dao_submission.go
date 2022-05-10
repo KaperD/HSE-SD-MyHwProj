@@ -5,6 +5,7 @@ import (
 	"time"
 )
 
+// SubmissionDao - gives access to Submission objects
 type SubmissionDao interface {
 	AddSubmission(homeworkId int64, newSubmission NewSubmission) Submission
 	GetHomeworkSubmissions(homeworkId int64, offset int32, limit int32) []Submission
@@ -12,6 +13,7 @@ type SubmissionDao interface {
 	UpdateSubmission(submission Submission)
 }
 
+// PostgresSubmissionDao - gives access to Submission objects stored in Postgres DB
 type PostgresSubmissionDao struct {
 	db *gorm.DB
 }
@@ -21,6 +23,7 @@ func NewPostgresSubmissionDao(db *gorm.DB) SubmissionDao {
 	return &PostgresSubmissionDao{db: db}
 }
 
+// AddSubmission adds new Submission to the system
 func (p *PostgresSubmissionDao) AddSubmission(homeworkId int64, newSubmission NewSubmission) Submission {
 	submission := Submission{
 		Id:         0,
@@ -34,12 +37,15 @@ func (p *PostgresSubmissionDao) AddSubmission(homeworkId int64, newSubmission Ne
 	return submission
 }
 
+// GetHomeworkSubmissions returns Submission list of Homework with specified id
+// Returns not more than limit elements skipping first offset elements
 func (p *PostgresSubmissionDao) GetHomeworkSubmissions(homeworkId int64, offset int32, limit int32) []Submission {
 	var submissions []Submission
 	p.db.Limit(int(limit)).Offset(int(offset)).Where("homework_id = ?", homeworkId).Order("datetime desc, id").Find(&submissions)
 	return submissions
 }
 
+// GetSubmissionById returns Submission by its id, or nil if there is no Submission with this id
 func (p *PostgresSubmissionDao) GetSubmissionById(submissionId int64) *Submission {
 	var submission Submission
 	result := p.db.First(&submission, submissionId)
@@ -49,6 +55,7 @@ func (p *PostgresSubmissionDao) GetSubmissionById(submissionId int64) *Submissio
 	return &submission
 }
 
+// UpdateSubmission updates given Submission in the system (finds old version by id)
 func (p *PostgresSubmissionDao) UpdateSubmission(submission Submission) {
 	p.db.Save(&submission)
 }

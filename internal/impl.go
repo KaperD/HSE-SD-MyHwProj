@@ -10,7 +10,7 @@
 
 package myhwproj
 
-//Implementation response defines an error code with the associated body
+// ImplResponse defines an error code with the associated body
 type ImplResponse[T any] struct {
 	Code int
 	Body T

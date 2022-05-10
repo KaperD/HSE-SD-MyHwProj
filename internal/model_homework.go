@@ -29,6 +29,7 @@ type Homework struct {
 	// Description of the task
 	Task string `json:"task"`
 
+	// Deadline of the homework
 	Deadline time.Time `json:"deadline"`
 }
 

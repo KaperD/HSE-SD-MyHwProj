@@ -80,6 +80,7 @@ func (s *StudentPagesApiService) GetSubmissionPageStudent(ctx context.Context, s
 	return s.renderPage("student.submission.gohtml", map[string]any{"Submission": submission, "Homework": homework})
 }
 
+// renderPage - get template from cache, execute it and returns result html string
 func (s *StudentPagesApiService) renderPage(templateName string, data any) (ImplResponse[string], error) {
 	ts, ok := s.TemplateCache[templateName]
 	if !ok {

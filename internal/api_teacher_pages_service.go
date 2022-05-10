@@ -85,6 +85,7 @@ func (s *TeacherPagesApiService) GetSubmissionPageTeacher(ctx context.Context, s
 	return s.renderPage("teacher.submission.gohtml", map[string]any{"Submission": submission, "Homework": homework})
 }
 
+// renderPage - get template from cache, execute it and returns result html string
 func (s *TeacherPagesApiService) renderPage(templateName string, data any) (ImplResponse[string], error) {
 	ts, ok := s.TemplateCache[templateName]
 	if !ok {
