@@ -27,7 +27,7 @@ jobs:
       - name: Checkout the repository
         uses: actions/checkout@v3
       - name: Run tests
-        run: go test -v ./test/... -coverpkg=./... -coverprofile cover.out
+        run: go test -v ./test/... -coverpkg=./internal/... -coverprofile cover.out
       - name: Create coverage report html
         if: ${{ always() }}
         run: go tool cover -html=cover.out -o cover.html
