@@ -9,23 +9,34 @@ import runner
 
 
 def main():
-    connection = pika.BlockingConnection(
-        pika.ConnectionParameters(host='localhost', port=5672))
-    channel = connection.channel()
-
-    channel.queue_declare(queue='hello')
-
     def callback(ch, method, properties, body):
-        print(" [x] Received %r" % body)
+        print(f" [x] Received: {body}")
         message = json.loads(body)
-        homework = runner.Howework(message['Howework']['check'])
+        homework = runner.Homework(message['Homework']['check'])
         submission = runner.Submission(message['Submission']['solution'])
-        print(homework.get_feedback(submission))
+        feedback = homework.get_feedback(submission)
+        response = message['Submission']
+        response['mark'] = feedback.mark
+        response['comment'] = feedback.comment
+        print(f" [x] Response build: {response}")
+        ch.basic_publish(exchange='',
+                         routing_key=properties.reply_to,
+                         properties=pika.BasicProperties(
+                             correlation_id=properties.correlation_id
+                         ),
+                         body=str(json.dumps(response)))
+        ch.basic_ack(delivery_tag=method.delivery_tag)
 
-    channel.basic_consume(
-        queue='hello', on_message_callback=callback, auto_ack=True)
+    connection = pika.BlockingConnection(pika.ConnectionParameters(
+        host='localhost',
+        port=5672)
+    )
+    channel = connection.channel()
+    channel.queue_declare(queue='rpc_queue')
+    channel.basic_qos(prefetch_count=1)
+    channel.basic_consume(queue='rpc_queue', on_message_callback=callback)
 
-    print(' [*] Waiting for messages. To exit press CTRL+C')
+    print(" [x] Awaiting RPC requests")
     channel.start_consuming()
 
 

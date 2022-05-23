@@ -22,7 +22,7 @@ class Feedback:
 
 
 @dataclass
-class Howework:
+class Homework:
     check_script_content: str
 
     def get_feedback(self, submission: Submission) -> Feedback:
