@@ -1,6 +1,8 @@
 # MyHwProj
 [![codecov](https://codecov.io/gh/KaperD/HSE-SD-MyHwProj/branch/02-impl/graph/badge.svg?token=TPI8LNSA9E)](https://codecov.io/gh/KaperD/HSE-SD-MyHwProj)
 
+## API and pages
+See it in Swagger [https://kaperd.github.io/HSE-SD-MyHwProj/](https://kaperd.github.io/HSE-SD-MyHwProj/)
 
 ## Running the server
 Firstly, you need Go 1.18 to be installed
