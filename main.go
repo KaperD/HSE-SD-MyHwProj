@@ -12,13 +12,14 @@ package main
 
 import (
 	"fmt"
-	"github.com/spf13/viper"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
 	"log"
 	"net/http"
 	"os"
 	"time"
+
+	"github.com/spf13/viper"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 
 	myhwproj "github.com/KaperD/HSE-SD-MyHwProj/internal"
 )
@@ -78,7 +79,7 @@ func main() {
 
 	SubmissionDao := myhwproj.NewPostgresSubmissionDao(db)
 	HomeworkDao := myhwproj.NewPostgresHomeworkDao(db)
-	WorkersService := myhwproj.NewRabbitMQWorkersService()
+	WorkersService := myhwproj.NewRabbitMQWorkersService(HomeworkDao)
 
 	StudentApiService := myhwproj.NewStudentApiService(SubmissionDao, HomeworkDao, WorkersService)
 	StudentApiController := myhwproj.NewStudentApiController(StudentApiService)
