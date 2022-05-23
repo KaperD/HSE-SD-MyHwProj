@@ -92,9 +92,11 @@ func CreateServer(homeworks []myhwproj.Homework, submissions []myhwproj.Submissi
 		SubmissionDao.submissions[submission.Id] = submission
 	}
 
-	WorkersService := myhwproj.NewRabbitMQWorkersService(&HomeworkDao)
+	WorkersService := rabbitMQWorkersServiceImpl{
+		func(submission myhwproj.Submission) {},
+	}
 
-	StudentApiService := myhwproj.NewStudentApiService(&SubmissionDao, &HomeworkDao, WorkersService)
+	StudentApiService := myhwproj.NewStudentApiService(&SubmissionDao, &HomeworkDao, &WorkersService)
 	StudentApiController := myhwproj.NewStudentApiController(StudentApiService)
 
 	StudentPagesApiService := myhwproj.NewStudentPagesApiService(StudentApiService, TemplateCache)
@@ -197,4 +199,17 @@ func (h *homeworkDaoImpl) GetHomeworks(offset int32, limit int32, onlyPublished 
 	})
 	end := int(math.Min(float64(offset+limit), float64(len(result))))
 	return result[offset:end]
+}
+
+type rabbitMQWorkersServiceImpl struct {
+	handler func(submission myhwproj.Submission)
+}
+
+func (r *rabbitMQWorkersServiceImpl) SetHandler(f func(submission myhwproj.Submission)) {
+	r.handler = f
+}
+
+func (r *rabbitMQWorkersServiceImpl) CheckSubmission(submission myhwproj.Submission) {
+	submission.Mark = 10
+	r.handler(submission)
 }
