@@ -15,8 +15,12 @@ jobs:
         uses: actions/checkout@v3
       - name: Build
         run: go build .
+      - name: Run Message Broker
+        run: docker run --name myhwproj-db -e POSTGRES_PASSWORD=postgres -e POSTGRES_USER=postgres -p 5432:5432 -d postgres
+      - name: Run Message Broker Server
+        run: cd runners && pipenv run main.py &
       - name: Run tests
-        run: go test -v ./test/...
+        run: cd .. && go test -v ./test/...
   test-coverage:
     runs-on: ubuntu-latest
     steps:
