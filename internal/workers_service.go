@@ -1,12 +1,9 @@
 package myhwproj
 
 import (
-	"bytes"
-	"encoding/base64"
-	"encoding/gob"
 	"encoding/json"
-	"fmt"
 	"log"
+	"math/rand"
 
 	"github.com/streadway/amqp"
 )
@@ -43,36 +40,31 @@ func (r *RabbitMQWorkersService) SetHandler(f func(submission Submission)) {
 	r.ResultHandler = f
 }
 
-func (submission *Submission) SerializeToBase64() string {
-	buffer := bytes.Buffer{}
-	encoder := gob.NewEncoder(&buffer)
-	err := encoder.Encode(submission)
-	failOnError(err, "Failed to encode Submission to Base64")
-	return base64.StdEncoding.EncodeToString(buffer.Bytes())
-}
-
-func DeserializeSubmissionFromBase64(str string) Submission {
-	submission := Submission{}
-	strBytes, err := base64.StdEncoding.DecodeString(str)
-	failOnError(err, "Failed to decode Submission from Base64")
-	buffer := bytes.Buffer{}
-	buffer.Write(strBytes)
-	decoder := gob.NewDecoder(&buffer)
-	err = decoder.Decode(&submission)
-	if err != nil {
-		fmt.Println(`failed gob Decode`, err)
-	}
-	return submission
-}
-
 type RabbitMQMessage struct {
 	Submission Submission
-	Howework   Homework
+	Homework   Homework
+}
+
+func randInt(min int, max int) int {
+	return min + rand.Intn(max-min)
+}
+
+func randomString(l int) string {
+	bytes := make([]byte, l)
+	for i := 0; i < l; i++ {
+		bytes[i] = byte(randInt(65, 90))
+	}
+	return string(bytes)
 }
 
 // CheckSubmission checks the submission async. After check calls handler on the result
 func (r *RabbitMQWorkersService) CheckSubmission(submission Submission) {
 	go func() {
+		homework := r.HomeworkDao.GetHomeworkById(submission.HomeworkId)
+		message := RabbitMQMessage{submission, *homework}
+		body, err := json.Marshal(message)
+		failOnError(err, "Failed to serialize submission to JSON")
+
 		conn, err := amqp.Dial("amqp://guest:guest@localhost:5672/")
 		failOnError(err, "Failed to connect to RabbitMQ")
 		defer conn.Close()
@@ -81,36 +73,51 @@ func (r *RabbitMQWorkersService) CheckSubmission(submission Submission) {
 		failOnError(err, "Failed to open a channel")
 		defer ch.Close()
 
-		homework := r.HomeworkDao.GetHomeworkById(submission.HomeworkId)
-
 		q, err := ch.QueueDeclare(
-			"hello", // name
-			false,   // durable
-			false,   // delete when unused
-			false,   // exclusive
-			false,   // no-wait
-			nil,     // arguments
+			"",    // name
+			false, // durable
+			false, // delete when unused
+			true,  // exclusive
+			false, // noWait
+			nil,   // arguments
 		)
 		failOnError(err, "Failed to declare a queue")
-		message := RabbitMQMessage{submission, *homework}
 
-		body, err := json.Marshal(message)
-		failOnError(err, "Failed to serialize submission to JSON")
+		msgs, err := ch.Consume(
+			q.Name, // queue
+			"",     // consumer
+			true,   // auto-ack
+			false,  // exclusive
+			false,  // no-local
+			false,  // no-wait
+			nil,    // args
+		)
+		failOnError(err, "Failed to register a consumer")
+
+		corrId := randomString(32)
 
 		err = ch.Publish(
-			"",     // exchange
-			q.Name, // routing key
-			false,  // mandatory
-			false,  // immediate
+			"",          // exchange
+			"rpc_queue", // routing key
+			false,       // mandatory
+			false,       // immediate
 			amqp.Publishing{
-				ContentType: "text/plain",
-				Body:        []byte(body),
-			})
+				ContentType:   "text/plain",
+				CorrelationId: corrId,
+				ReplyTo:       q.Name,
+				Body:          []byte(body),
+			},
+		)
 
 		failOnError(err, "Failed to publish a message")
-		log.Printf(" [x] Sent %s\n", body)
-		submission.Mark = 5
-		submission.Comment = "Checked"
-		r.ResultHandler(submission)
+
+		for d := range msgs {
+			if corrId == d.CorrelationId {
+				err = json.Unmarshal(d.Body, &submission)
+				failOnError(err, "Failed to parse response submission json")
+				r.ResultHandler(submission)
+				break
+			}
+		}
 	}()
 }
