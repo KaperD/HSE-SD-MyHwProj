@@ -3,8 +3,6 @@ package test
 import (
 	"bytes"
 	"encoding/json"
-	myhwproj "github.com/KaperD/HSE-SD-MyHwProj/internal"
-	"github.com/stretchr/testify/assert"
 	"io"
 	"log"
 	"math"
@@ -12,6 +10,9 @@ import (
 	"sort"
 	"testing"
 	"time"
+
+	myhwproj "github.com/KaperD/HSE-SD-MyHwProj/internal"
+	"github.com/stretchr/testify/assert"
 )
 
 func HomeworksEquals(t *testing.T, expectedHomework myhwproj.Homework, homework myhwproj.Homework) {
@@ -91,7 +92,7 @@ func CreateServer(homeworks []myhwproj.Homework, submissions []myhwproj.Submissi
 		SubmissionDao.submissions[submission.Id] = submission
 	}
 
-	WorkersService := myhwproj.NewRabbitMQWorkersService()
+	WorkersService := myhwproj.NewRabbitMQWorkersService(&HomeworkDao)
 
 	StudentApiService := myhwproj.NewStudentApiService(&SubmissionDao, &HomeworkDao, WorkersService)
 	StudentApiController := myhwproj.NewStudentApiController(StudentApiService)
