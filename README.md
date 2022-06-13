@@ -27,7 +27,7 @@ And the last thing, we use RabbitMQ. The last command will do in inside an other
 docker run -it --rm --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3-management
 ```
 
-Then you can run the message broker itself
+## Running the worker
 ```shell
 cd runners
 pipenv install
