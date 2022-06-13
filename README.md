@@ -15,16 +15,15 @@ docker run --name myhwproj-db -e POSTGRES_PASSWORD=postgres -e POSTGRES_USER=pos
 
 If you specified other parameters, you should change them in [db_config.json](./db_config.json)
 
-After that you can run server
-```shell
-go run main.go
-```
-
-## Running the message broker
 And the last thing, we use RabbitMQ. The last command will do in inside an other Docker image.
 
 ```shell
 docker run -it --rm --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3-management
+```
+
+After that you can run server
+```shell
+go run main.go
 ```
 
 ## Running the worker
